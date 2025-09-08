@@ -14,8 +14,8 @@ import (
 )
 
 var (
-	EncryptVar *EncryptImpl
-	once       sync.Once
+	EncryptImplVar *EncryptImpl
+	once           sync.Once
 )
 
 type EncryptImpl struct {
@@ -23,9 +23,9 @@ type EncryptImpl struct {
 
 func NewEncryptImpl() *EncryptImpl {
 	once.Do(func() {
-		EncryptVar = &EncryptImpl{}
+		EncryptImplVar = &EncryptImpl{}
 	})
-	return EncryptVar
+	return EncryptImplVar
 }
 
 func (e *EncryptImpl) RandomString(length int) (string, error) {

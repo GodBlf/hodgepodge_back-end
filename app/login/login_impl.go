@@ -100,10 +100,10 @@ func (l *LoginImpl) Login(username, password string) (string, bool, error) {
 
 func NewLoginImpl(client *resty.Client, encrypt encrypt.Encrypt) *LoginImpl {
 	once.Do(func() {
-		LoginVar = &LoginImpl{
+		LoginImplVar = &LoginImpl{
 			Encrypt: encrypt,
 			Client:  client,
 		}
 	})
-	return LoginVar
+	return LoginImplVar
 }
