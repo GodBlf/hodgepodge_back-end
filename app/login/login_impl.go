@@ -11,8 +11,8 @@ import (
 )
 
 var (
-	LoginVar *LoginImpl
-	once     sync.Once
+	LoginImplVar *LoginImpl
+	once         sync.Once
 )
 
 type LoginImpl struct {
