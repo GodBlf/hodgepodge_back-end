@@ -1,0 +1,38 @@
+package initialize
+
+import (
+	"github.com/spf13/viper"
+	"xmu_roll_call/global"
+	"xmu_roll_call/model"
+)
+
+type ConfigModel struct {
+	UserName  string
+	PassWord  string
+	UserAgent string
+}
+
+func InitConfig() {
+	v := viper.New()
+	v.SetConfigFile("./config/config.yaml")
+	err := v.ReadInConfig()
+	if err != nil {
+		panic("读取配置文件失败: " + err.Error())
+	}
+	username := v.GetString("username")
+	password := v.GetString("password")
+	ua := v.GetString("user_agent")
+	if ua == "" {
+		ua = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"
+	}
+	if username == "" || password == "" {
+		panic("配置文件缺少 username/password")
+	}
+	cfg := &model.ConfigModel{
+		UserName:  username,
+		PassWord:  password,
+		UserAgent: ua,
+		IdsUrl:    v.GetString("ids_url"),
+	}
+	global.Config = cfg
+}
