@@ -20,6 +20,21 @@ type RollCallImpl struct {
 	Client *resty.Client
 }
 
+func (r *RollCallImpl) RollCallLogin() error {
+	execution, boolean, err := r.Login.Login(global.Config.UserName, global.Config.PassWord)
+	if err != nil {
+		zap.L().Error("登录失败", zap.Error(err))
+		return err
+	}
+	if !boolean {
+		zap.L().Warn("登录失败,请检查用户名和密码是否正确", zap.String("execution", execution))
+		return errors.New("登录失败,请检查用户名和密码是否正确")
+	}
+	zap.L().Info("登录成功", zap.String("execution", execution))
+	return nil
+
+}
+
 func (r *RollCallImpl) NumberCodeQuery(rollcall map[string]int) (map[string]string, error) {
 	//TODO implement me
 	results := make(map[string]string)
