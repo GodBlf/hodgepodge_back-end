@@ -25,7 +25,9 @@ func InitializeLoginImpl() *login.LoginImpl {
 
 func InitializeRollCallImpl() *roll_call.RollCallImpl {
 	restyClient := client.NewClient()
-	rollCallImpl := roll_call.NewRollCallImpl(restyClient)
+	encryptImpl := encrypt.NewEncryptImpl()
+	loginImpl := login.NewLoginImpl(restyClient, encryptImpl)
+	rollCallImpl := roll_call.NewRollCallImpl(restyClient, loginImpl)
 	return rollCallImpl
 }
 
@@ -33,7 +35,7 @@ func InitializeAppImpl() *app.AppImpl {
 	restyClient := client.NewClient()
 	encryptImpl := encrypt.NewEncryptImpl()
 	loginImpl := login.NewLoginImpl(restyClient, encryptImpl)
-	rollCallImpl := roll_call.NewRollCallImpl(restyClient)
+	rollCallImpl := roll_call.NewRollCallImpl(restyClient, loginImpl)
 	appImpl := app.NewAppImpl(loginImpl, rollCallImpl)
 	return appImpl
 }

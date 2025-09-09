@@ -12,3 +12,8 @@ func Exe2DeviceID(execution string) (string, error) {
 	}
 	return execution[0:index], nil
 }
+
+// todo:最短路径
+func MinDistance() (string, error) {
+	return "", nil
+}

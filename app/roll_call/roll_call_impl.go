@@ -2,13 +2,16 @@ package roll_call
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/go-resty/resty/v2"
 	"github.com/tidwall/gjson"
 	"go.uber.org/zap"
 	"sync"
+	"xmu_roll_call/app/login"
 	"xmu_roll_call/global"
 	"xmu_roll_call/model"
+	"xmu_roll_call/utils"
 )
 
 var (
@@ -17,25 +20,36 @@ var (
 )
 
 type RollCallImpl struct {
+	Login  login.Login
 	Client *resty.Client
 }
 
-func (r *RollCallImpl) RollCallLogin() error {
+func (r *RollCallImpl) RollCallLogin() (string, error) {
 	execution, boolean, err := r.Login.Login(global.Config.UserName, global.Config.PassWord)
 	if err != nil {
 		zap.L().Error("登录失败", zap.Error(err))
-		return err
+		return execution, err
 	}
+	deviceID, err := utils.Exe2DeviceID(execution)
+	if err != nil {
+		zap.L().Error("设备ID生成失败", zap.Error(err))
+		return "", err
+	}
+
 	if !boolean {
 		zap.L().Warn("登录失败,请检查用户名和密码是否正确", zap.String("execution", execution))
-		return errors.New("登录失败,请检查用户名和密码是否正确")
+		return deviceID, errors.New("登录失败,请检查用户名和密码是否正确")
 	}
 	zap.L().Info("登录成功", zap.String("execution", execution))
-	return nil
+	return deviceID, nil
 
 }
 
-func (r *RollCallImpl) NumberCodeQuery(rollcall map[string]int) (map[string]string, error) {
+//0:number 1:radar 2:qr
+//todo:以后用enum枚举代替
+//var RadarError = errors.New("radar_rollcall")
+
+func (r *RollCallImpl) NumberCodeQuery(rollcall map[string]int) (map[string]string, error, int) {
 	//TODO implement me
 	results := make(map[string]string)
 	for title, rollCallId := range rollcall {
@@ -51,13 +65,11 @@ func (r *RollCallImpl) NumberCodeQuery(rollcall map[string]int) (map[string]stri
 			results[title] = ""
 			continue
 		}
-
-		if err != nil {
-			zap.L().Error("签到码查询响应解析失败", zap.Error(err))
-			results[title] = ""
-			continue
-		}
 		responseString := response.String()
+		isRadar := gjson.Get(responseString, "is_radar").Bool()
+		if isRadar {
+			return nil, nil, 1
+		}
 		NumberCode := gjson.Get(responseString, "number_code").String()
 		if NumberCode != "" {
 			results[title] = NumberCode
@@ -67,7 +79,7 @@ func (r *RollCallImpl) NumberCodeQuery(rollcall map[string]int) (map[string]stri
 			results[title] = ""
 		}
 	}
-	return results, nil
+	return results, nil, 0
 }
 
 func (r *RollCallImpl) NumberCodePost(courseNameRollCallId map[string]int, numberCode map[string]string, deviceId string) error {
@@ -94,10 +106,11 @@ func (r *RollCallImpl) NumberCodePost(courseNameRollCallId map[string]int, numbe
 	return nil
 }
 
-func NewRollCallImpl(c *resty.Client) *RollCallImpl {
+func NewRollCallImpl(c *resty.Client, l login.Login) *RollCallImpl {
 	once.Do(func() {
 		RollCallImplVar = &RollCallImpl{
 			Client: c,
+			Login:  l,
 		}
 	})
 	return RollCallImplVar

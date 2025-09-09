@@ -21,7 +21,10 @@ func InitializeLoginImpl() *login.LoginImpl {
 }
 
 func InitializeRollCallImpl() *roll_call.RollCallImpl {
-	wire.Build(client.NewClient, roll_call.NewRollCallImpl)
+	wire.Build(client.NewClient, roll_call.NewRollCallImpl, login.NewLoginImpl, encrypt.NewEncryptImpl,
+		wire.Bind(new(encrypt.Encrypt), new(*encrypt.EncryptImpl)),
+		wire.Bind(new(login.Login), new(*login.LoginImpl)),
+	)
 	return &roll_call.RollCallImpl{}
 }
 
