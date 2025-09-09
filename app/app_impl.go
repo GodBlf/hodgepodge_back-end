@@ -16,6 +16,16 @@ type AppImpl struct {
 	RollCall roll_call.RollCall
 }
 
+func (a *AppImpl) AppLogin() error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (a *AppImpl) AppImplRollCall() error {
+	//TODO implement me
+	panic("implement me")
+}
+
 func NewAppImpl(login login.Login, rollCall roll_call.RollCall) *AppImpl {
 	once.Do(func() {
 		AppImplVar = &AppImpl{

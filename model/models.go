@@ -1,10 +1,11 @@
 package model
 
 type ConfigModel struct {
-	UserName  string
-	PassWord  string
-	UserAgent string
-	IdsUrl    string
+	UserName          string
+	PassWord          string
+	UserAgent         string
+	IdsUrl            string
+	RollCallStatusUrl string
 }
 
 type RollCallJson struct {

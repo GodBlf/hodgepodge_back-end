@@ -4,6 +4,7 @@
 # 技术栈
 - resty
 - goquery
+- gjson
 - cookiejar
 - wire
 - zap
