@@ -5,6 +5,7 @@ go 1.24
 require (
 	github.com/PuerkitoBio/goquery v1.10.3
 	github.com/go-resty/resty/v2 v2.16.5
+	github.com/golang/mock v1.6.0
 	github.com/google/wire v0.7.0
 	github.com/spf13/viper v1.20.1
 	github.com/tidwall/gjson v1.18.0
