@@ -29,10 +29,11 @@ func InitConfig() {
 		panic("配置文件缺少 username/password")
 	}
 	cfg := &model.ConfigModel{
-		UserName:  username,
-		PassWord:  password,
-		UserAgent: ua,
-		IdsUrl:    v.GetString("ids_url"),
+		UserName:          username,
+		PassWord:          password,
+		UserAgent:         ua,
+		IdsUrl:            v.GetString("ids_url"),
+		RollCallStatusUrl: v.GetString("roll_call_status_url"),
 	}
 	global.Config = cfg
 }
