@@ -15,3 +15,7 @@ type RollCallJson struct {
 	CourseTitle    string `json:"course_title"`
 	RollcallID     int    `json:"rollcall_id"`
 }
+
+type RollCalls struct {
+	List []RollCallJson `json:"rollcalls"`
+}

@@ -1,11 +1,13 @@
 package global
 
 import (
+	"github.com/gin-gonic/gin"
 	"xmu_roll_call/model"
 )
 
 var (
 	Config *model.ConfigModel
+	Router *gin.Engine
 )
 
 var Locations = []struct {

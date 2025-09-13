@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go.uber.org/zap"
 	"time"
+	"xmu_roll_call/global"
 	"xmu_roll_call/initialize"
 )
 
@@ -13,8 +14,19 @@ import (
 func main() {
 	initialize.InitLogger()
 	initialize.InitConfig()
+	initialize.InitRouter()
 	rollCallImpl := InitializeRollCallImpl()
 	deviceId, err := rollCallImpl.RollCallLogin()
+	rollCallImpl.DeviceId = deviceId
+	if err != nil {
+		zap.L().Error("RollCallLogin err", zap.Error(err))
+		return
+	}
+	zap.L().Info("登录成功,查询签到状态...")
+	global.Router.GET("/r", rollCallImpl.RollCallFinal)
+	global.Router.Run(":8080")
+	return
+	//todo:delete
 	if err != nil {
 		zap.L().Error("RollCallLogin err", zap.Error(err))
 		return

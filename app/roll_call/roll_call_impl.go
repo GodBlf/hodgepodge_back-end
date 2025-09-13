@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/go-resty/resty/v2"
 	"github.com/tidwall/gjson"
 	"go.uber.org/zap"
@@ -20,8 +21,62 @@ var (
 )
 
 type RollCallImpl struct {
-	Login  login.Login
-	Client *resty.Client
+	Login    login.Login
+	Client   *resty.Client
+	DeviceId string
+}
+
+func (r *RollCallImpl) RollCallFinal(c *gin.Context) {
+	courseAndRollcallId, err := r.RollCallStatus()
+	if err != nil {
+		zap.L().Error("查询签到状态失败", zap.Error(err))
+		c.JSON(500, gin.H{"message": "查询签到状态失败"})
+		return
+	}
+	zap.L().Info("查询签到状态成功", zap.Any("查询结果", courseAndRollcallId))
+	if len(courseAndRollcallId) == 0 {
+		zap.L().Info("当前没有需要签到的课程")
+		c.JSON(200, gin.H{"message": "当前没有需要签到的课程"})
+		return
+	}
+	zap.L().Info("开始查询签到码...")
+	query, err, rollcallType := r.NumberCodeQuery(courseAndRollcallId)
+
+	if rollcallType == 0 {
+		zap.L().Info("签到码查询成功", zap.Any("查询结果", query))
+		zap.L().Info("打印签到码...")
+		for title, numbercode := range query {
+			if numbercode != "" {
+				fmt.Printf("✅ %s: 签到码 %s\n", title, numbercode)
+			} else {
+				fmt.Printf("❌ %s: 获取签到码失败\n", title)
+			}
+		}
+		zap.L().Info("开启自动签到...")
+
+		err = r.NumberCodePost(courseAndRollcallId, query, r.DeviceId)
+		if err != nil {
+			zap.L().Error("自动签到失败", zap.Error(err))
+			query["message"] = "自动签到失败"
+			c.JSON(500, query)
+			return
+		}
+		zap.L().Info("自动签到成功")
+		query["message"] = "自动签到成功"
+		c.JSON(200, query)
+		return
+
+	} else if rollcallType == 1 {
+		//radar rollcall
+		zap.L().Info("雷达签到", zap.Any("查询结果", query))
+		zap.L().Info("开启自动签到...")
+		c.JSON(200, gin.H{"message": "雷达签到"})
+		return
+	} else {
+		zap.L().Warn("二维码签到请老实上课", zap.Any("查询结果", query))
+		c.JSON(200, gin.H{"message": "二维码签到请老实上课"})
+		return
+	}
 }
 
 func (r *RollCallImpl) RollCallLogin() (string, error) {
@@ -40,7 +95,7 @@ func (r *RollCallImpl) RollCallLogin() (string, error) {
 		zap.L().Warn("登录失败,请检查用户名和密码是否正确", zap.String("execution", execution))
 		return deviceID, errors.New("登录失败,请检查用户名和密码是否正确")
 	}
-	zap.L().Info("登录成功", zap.String("execution", execution))
+	zap.L().Info("登录成功", zap.String("deviceID", deviceID))
 	return deviceID, nil
 
 }
@@ -127,14 +182,14 @@ func (r *RollCallImpl) RollCallStatus() (map[string]int, error) {
 		zap.L().Error("签到状态请求返回错误状态码", zap.Int("status_code", response.StatusCode()))
 		return nil, err
 	}
-	unmarshalList := struct{ list []model.RollCallJson }{list: make([]model.RollCallJson, 10)}
-	err = json.Unmarshal(response.Body(), &unmarshalList)
+	unmarshalList := &model.RollCalls{}
+	err = json.Unmarshal(response.Body(), unmarshalList)
 	if err != nil {
 		zap.L().Error("签到状态响应解析失败", zap.Error(err))
 		return nil, err
 	}
 	pending := make(map[string]int)
-	for _, status := range unmarshalList.list {
+	for _, status := range unmarshalList.List {
 		if status.RollcallID != 0 {
 			pending[status.CourseTitle] = status.RollcallID
 		}
