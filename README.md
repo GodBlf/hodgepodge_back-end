@@ -3,10 +3,12 @@
 
 # 技术栈
 - resty
+- cookiejar
+- gin
 - goquery
 - json
 - gjson
-- cookiejar
-- wire
 - zap
 - viper
+- gomock
+- wire
