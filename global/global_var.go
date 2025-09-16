@@ -10,6 +10,12 @@ var (
 	Router *gin.Engine
 )
 
+var (
+	LlmUrl    string
+	LlmApiKey string
+	LlmModel  string
+)
+
 var Locations = []struct {
 	Latitude  string
 	Longitude string

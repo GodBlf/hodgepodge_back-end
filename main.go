@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"time"
+	"xmu_roll_call/app_plus/llms"
 	"xmu_roll_call/global"
 	"xmu_roll_call/initialize"
 )
@@ -23,6 +25,32 @@ func main() {
 		return
 	}
 	zap.L().Info("登录成功,查询签到状态...")
+	//"/"重定向为"/test" get方法
+	global.Router.GET("/:input", func(c *gin.Context) {
+		input := c.Param("input")
+		c.Redirect(302, "/test/"+input)
+	})
+	global.Router.GET("/test/:input", func(c *gin.Context) {
+		input := c.Param("input")
+		translate, err2 := llms.Translate(input)
+		if err2 != nil {
+			c.JSON(500, gin.H{"error": err2.Error()})
+			zap.L().Error("Translate failed", zap.Error(err2))
+		}
+		c.JSON(200, gin.H{
+			"response": translate,
+		})
+	})
+	//ping
+	global.Router.GET("/ping", func(context *gin.Context) {
+		context.JSON(200, map[string]string{
+			"message": "pong",
+		})
+	})
+	//llm
+	llmImpl := llms.NewLlmImpl()
+	global.Router.GET("/llm", llmImpl.Send)
+	//
 	global.Router.GET("/r", rollCallImpl.RollCallFinal)
 	global.Router.Run(":8080")
 	return

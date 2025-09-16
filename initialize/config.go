@@ -19,6 +19,9 @@ func InitConfig() {
 	if err != nil {
 		panic("读取配置文件失败: " + err.Error())
 	}
+	global.LlmUrl = v.GetString("llm_url")
+	global.LlmApiKey = v.GetString("llm_api_key")
+	global.LlmModel = v.GetString("llm_model")
 	username := v.GetString("username")
 	password := v.GetString("password")
 	ua := v.GetString("user_agent")

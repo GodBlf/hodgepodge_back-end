@@ -345,3 +345,20 @@ testing.tRunner
 2025-09-12T00:31:15.410+0800	INFO	roll_call/roll_call_impl_test.go:87	打印签到码...
 2025-09-12T00:31:15.410+0800	INFO	roll_call/roll_call_impl_test.go:95	开启自动签到...
 2025-09-12T00:31:15.410+0800	INFO	roll_call/roll_call_impl_test.go:104	自动签到成功
+2025-09-16T22:54:55.048+0800	INFO	llms/llm_impl_test.go:21	Translate response: 你好呀！😊 很高兴见到你。  
+你今天过得怎么样？
+2025-09-16T23:02:40.726+0800	ERROR	llms/llm_impl.go:109	LLM API response error	{"status": 503, "body": "{\"error\":{\"message\":\"分组 default 下模型 gpt-5-chat 无可用渠道（distributor） (request id: 20250916230234471972418UAX4dqem)\",\"type\":\"new_api_error\"}}"}
+xmu_roll_call/app_plus/llms.Translate
+	D:/Projects/xmu_roll_call/app_plus/llms/llm_impl.go:109
+xmu_roll_call/test/app_plus/llms.TestTr
+	D:/Projects/xmu_roll_call/test/app_plus/llms/llm_impl_test.go:14
+testing.tRunner
+	D:/gosdk/go1.24.4/src/testing/testing.go:1792
+2025-09-16T23:02:40.794+0800	ERROR	llms/llm_impl_test.go:16	Translate failed: 	{"error": "LLM API error: {\"error\":{\"message\":\"分组 default 下模型 gpt-5-chat 无可用渠道（distributor） (request id: 20250916230234471972418UAX4dqem)\",\"type\":\"new_api_error\"}}"}
+xmu_roll_call/test/app_plus/llms.TestTr
+	D:/Projects/xmu_roll_call/test/app_plus/llms/llm_impl_test.go:16
+testing.tRunner
+	D:/gosdk/go1.24.4/src/testing/testing.go:1792
+2025-09-16T23:03:23.190+0800	INFO	llms/llm_impl_test.go:21	Translate response:  你好！很高兴认识你。我是Claude，一个由Anthropic开发的AI助手。我可以帮助你处理各种任务，比如回答问题、协助写作、分析问题、编程帮助等等。
+
+有什么我可以为你做的吗？
