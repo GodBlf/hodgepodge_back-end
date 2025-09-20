@@ -7,7 +7,16 @@ type ConfigModel struct {
 	IdsUrl            string
 	RollCallStatusUrl string
 }
-
+type RollCalls struct {
+	List []RollCallItem `json:"rollcalls"`
+}
+type RollCallItem struct {
+	CourseTitle string `json:"course_title"`
+	RollcallID  int    `json:"rollcall_id"`
+	IsNumber    bool   `json:"is_number"`
+	IsRadar     bool   `json:"is_radar"`
+	Status      string `json:"status"`
+}
 type RollCallJson struct {
 	RollcallStatus string `json:"rollcall_status"`
 	Status         string `json:"status"`
@@ -16,9 +25,15 @@ type RollCallJson struct {
 	RollcallID     int    `json:"rollcall_id"`
 }
 
-type RollCalls struct {
-	List []RollCallJson `json:"rollcalls"`
+type Location struct {
+	Name      string
+	Longitude float64
+	Latitude  float64
 }
+
+//type RollCalls struct {
+//	List []RollCallJson `json:"rollcalls"`
+//}
 
 type RandomSentenceUrl struct {
 	Urls []string

@@ -49,3 +49,421 @@ net/http.(*conn).serve
 	D:/gosdk/go1.24.4/src/net/http/server.go:2102
 2025-09-18T11:36:44.028+0800	INFO	llms/llm_impl.go:126	LLM response	{"reply": "你好！我是你的AI助手。有什么可以帮到你吗？"}
 2025-09-18T11:37:13.716+0800	INFO	llms/llm_impl.go:126	LLM response	{"reply": "GPT 是“Generative Pre-trained Transformer”的缩写，中文常译为“生成式预训练转换器”。它是一类基于 Transformer 架构的大型语言模型，用来理解和生成自然语言（也逐步扩展到多模态，如图像、音频等）。\n\n核心思想\n- 生成式：根据已知内容，预测并生成下一个词（或更细的“token”），从而连贯地写出整段文本。\n- 预训练：先在海量公开文本上进行自监督学习，获得通用的语言与世界知识。\n- Transformer：依靠“自注意力”机制在长文本中捕捉上下文关系，比传统RNN更擅长处理长距离依赖。\n\n训练与对齐\n- 预训练：学习语言统计规律和常识，目标是“下一个词预测”。\n- 微调：在特定任务（如问答、翻译、编程）上进一步训练，使模型更好用。\n- 人类反馈对齐（如RLHF）：用标注和偏好数据让回答更有帮助、更安全、更符合人类价值观。\n\n能做什么\n- 回答问题、写作（邮件、文案、故事）、总结与改写、语言翻译\n- 辅助编程（解释代码、补全、调试思路）\n- 头脑风暴与结构化分析、信息提炼\n- 多模态版本还能理解图片、音频，并进行相关生成与推理\n\n不能保证的\n- 事实可靠性：可能“幻觉”（编造听起来合理但不真实的信息）\n- 最新信息：通常有训练数据的时间截点，未联网或未调用检索时无法获知最新事件\n- 推理一致性：对复杂逻辑、长链推理和专业计算可能出错\n- 中立与无偏：会受训练数据的偏差影响\n\n常见误解澄清\n- GPT 不是有意识的“思考者”，而是强大的概率文本预测器。\n- GPT 与 ChatGPT：前者是模型家族，后者是基于这些模型的对话产品界面。\n- 不是搜索引擎：它按概率生成文本，不等同于检索数据库；可与检索结合以提升可靠性。\n\n工作原理（直观版）\n- 把文本切成“token”\n- 通过多层 Transformer 用注意力机制理解上下文\n- 逐步预测下一个最合适的 token，形成连贯输出\n- 通过温度、top-k/top-p 等采样控制“创意度”与稳定性\n\n如何更好使用\n- 明确目标与约束（受众、风格、长度、格式）\n- 提供上下文与示例\n- 让模型一步步推理（比如要求给出思路再给结论）\n- 对关键信息做核验，尤其是数据、引用和专业结论\n\n应用与影响\n- 提升内容生产与知识工作效率\n- 辅助教育、客服、研发、运营等\n- 引发关于版权、偏见、安全与就业结构的持续讨论\n\n简而言之，GPT 是一种通过大规模预训练与对齐技术，能够理解并生成语言的通用型模型，擅长广泛任务但仍需人类监督与事实校对。"}
+2025-09-20T22:27:28.224+0800	INFO	login/login_impl.go:43	抓取加密盐成功	{"encryp_salt": "dy9iClc4gOLXFXxo"}
+2025-09-20T22:27:28.268+0800	INFO	login/login_impl.go:49	execution抓取成功	{"execution": "876c229e-4490-418a-a778-88a2916673c0_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuU2J4OXBlN0ZhbElLOUVRTmU5aEhpYTV5aGUyMkhaLzF3K2hySjUwWHFRUjJNcTBIWXNKcnhyYUxBeHFGOGtXdDdIekxnTzI3YVRwa25rcTlRY0k0M1RPWHpBREdSajByNjBQVFdnOTdYa3AwT3hRWDJkTGhlSzJTM3dNTHE0RUkzTFZDU2JKZ2I4bHBCT0Y2MFAwc0FEMHQ3aTZpRGx3c0dvOVlZN2dseWh4TmtydjlaWFFYUndSSVFTdDU1RDc0blRZSTkvWnI0b2pJT0p6ME51QWxpclV3YVo5RXY3ZXk0MDRHS1NjaHFHQ0hDYTdDTDlXaDBNUlMwcEJmWjZzVnRvZHcxV2QvOVR6bkVGKzErdzJhbkd0WW4wdDdNbS9aYlg5N3pWL1dCWVFSWVJpYTBmekZ0dXVMa1ZlbDJZcEwrNXRQTVBEVk9MZk9rbHBOYzc2VVcxcHl0RGNCcFVSaDVtM2czS0ErZUtNcVRXcHh4c1VTOFVOL3Bpc3hKeEtWUU5ubTlaeFZtY0NyQ2wrQjQ4VDdvcVh1eXI3Y2ROWkZJa3d3QjE3YjgyeWpVQ2IwQS9OUEY1M3poM3pTOWNkSk15dDhoU09DWEdxZ3FZTllHUnR0Zlg4blJqMXBhTUpEUFZGRUk5cjBlQlF1Y0RYRjhyVU5aNVMzT2tlcHpYMmwrK1B4bzBGSmJqd0RoRGVYQUY3Ynd5NmI3Vk9VSEtXSy9LbTRpM0VIL2VidDZISVlid0Z0TklIRmZBdjVURm1XOTZpeU1lbEZvdHp1NmJqRWIzL05TWlc0RW1ScWhvVzVpUnhLaXBPandIR2paNUtiOHM3Sm81dkQ3c25OR2VIT1dzbW96WFJ5NDkveDFhUFpnNUZHS1hRSnZxbnUwdWZzcUZjemRza0I5T0FMaVlYc3Ntaml1RUEwSGlCWGhJcHovTzBWRnlGeEltdlYyS2NlT0lFTU1GZmkwVWNTU1BqaEUyOXF0YVV3bDNIMWJrN1RMa05XZHpkYTZDR3BURnJwS3FhOVI4VGdLbmUxcGZzeGVOL1JKSElHOWJuaFJVeGM1a085Y3hCcGdxUHBiNC9yMTVjVnFIUzZlWllnaVF5N0NmMUJKN2lTTTdicGhPcFZ3VzhSWXVFKzlKcDE1SVFQemFpRllIdmJ1Y0w0OXVycTJMSHROM0hDWndOQ3hCR2xzWHVLRzQ3c2RjaGxVOGlQcVZZRnlEMUQxRDhscFUvbkUvS2lkb21uQXNFYXpWYldNQnZvU2FMdktCUnQwWEowb0E1NHphalVJNUkvVm95bWJEVVl2MmNVdUQwbGxjRmFIZFVlUWdQY055SndacHV6QVFtUGZrNFlPUWphazU0SUhacjgyUk5lUWR6eDZ0bzluVnRVcHlrY0xjOVRWbDhMb0Z1Yi9tMjRiWEQ0MU5TNXNIWWFUYTNnMDNhUldGS0RtV1BsZXE1UDNXRVkxUVAwKzB2d1BENmdyeWdtS2I2Z3R5WnNLalJrMmVjL291VjlGRVZpWXVCNmYxZStvMm8xZ2hLbTlUQnlvNGtRUGNMd1FMWmZuU0hMWkQxYVhjeVl3S2cwcTlRUWVXTGFvTEtKUEdIaDRWTy9xZ1M4TXc2cUZkYTFyKy82WEFLMGJQVlhpOWR3dllzeXRaMFU0ZytvNEcvQ1B5SURPSGFad3NBUDF1anFpY2RmTmxXdG82VHpMd0JVZThSQzdGYzJsNThjVXdrRzR5ait2SkJpRXh5M004OGlyS29sdVlOVVlMdGlTS0FhTnZwaWhjZmdMM3hFU1hBSEpsYXlGVGVuNUp1M1BQeWROM3ZqR082Z1pGaENwbm8zbzhkZHBrOHovUnE3RmpGS3JQb05LbVUyaTVPdDhXOG5hK2t6OVIzbDcvWEFoRFRIOWY2aWo0UWVFcXhQYnNFa0RldzRkOVFtY3RTWEJKVGZvVFowcDc5dEg4c3luS0pXZE1pK1l6aXFsS2s3dityUi9zVURMRVo5Q3F2TGZJbHpMYlRIS0t6NHdKNU9ZUmdXWHM0RDhhcGhwZ2Y2LmFXX281UG9ON21hYmVhQ2tTdC1USWU4MzhkRXhmdmVVUU1nMjJnOUFrVGw1NlFjTk5vSGdlUl90R1hjMUVqaklTMWdQV2x3R18wdmttcndPWEp2Wk5n"}
+2025-09-20T22:27:28.407+0800	INFO	login/login_impl.go:85	重新定向登录成功
+2025-09-20T22:27:28.407+0800	INFO	roll_call/roll_call_impl.go:98	登录成功	{"deviceID": "876c229e-4490-418a-a778-88a2916673c0"}
+2025-09-20T22:27:28.407+0800	INFO	xmu_roll_call/main.go:28	登录成功,查询签到状态...
+2025-09-20T23:12:24.644+0800	INFO	login/login_impl.go:43	抓取加密盐成功	{"encryp_salt": "sIVxtMBHBO64e33f"}
+2025-09-20T23:12:24.719+0800	INFO	login/login_impl.go:49	execution抓取成功	{"execution": "614e8458-abea-4804-a9bd-7f51c7f3bb11_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuU2J4OXBlN0ZhbElLOUVRTmU5aEhpYTV5aGUyMkhaLzF3K2hySjUwWHFRUjJNcTBIWXNKcnhyYUxBeHFGOGtXdDdIekxnTzI3YVRwa25rcTlRY0k0M1RPWHpBREdSajByNjBQVFdnOTdYa3AwT3hRWDJkTGhlSzJTM3dNTHE0RUkzTFZDU2JKZ2I4bHBCT0Y2MFAwc0FEMHQ3aTZpRGx3c0dvOVlZN2dseWh4TmtydjlaWFFYUndSSVFTdDU1RDc0blRZSTkvWnI0b2pJT0p6ME51QWxpclV3YVo5RXY3ZXk0MDRHS1NjaHFHQ0hDYTdDTDlXaDBNUlMwcEJmWjZzVnRvZHcxV2QvOVR6bkVGKzErdzJhbkd0WW4wdDdNbS9aYlg5N3pWL1dCWVFSWVJpYTBmekZ0dXVMa1ZlbDJZcEwrNXRQTVBEVk9MZk9rbHBOYzc2VVcxcHl0RGNCcFVSaDVtM2czS0ErZUtNcVRXcHh4c1VTOFVOL3Bpc3hKeEtWUU5ubTlaeFZtY0NyQ2wrQjQ4VDdvcVh1eXI3Y2ROWkZJa3d3QjE3YjgyeWpVQ2IwQS9OUEY1M3poM3pTOWNkSk15dDhoU09DWEdxZ3FZTllHUnR0Zlg4blJqMXBhTUpEUFZGRUk5cjBlQlF1Y0RYRjhyVU5aNVMzT2tlcHpYMmwrK1B4bzBGSmJqd0RoRGVYQUY3Ynd5NmI3Vk9VSEtXSy9LbTRpM0VIL2VidDZISVlid0Z0TklIRmZBdjVURm1XOTZpeU1lbEZvdHp1NmJqRWIzL05TWlc0RW1ScWhvVzVpUnhLaXBPandIR2paNUtiOHM3Sm81dkQ3c25OR2VIT1dzbW96WFJ5NDkveDFhUFpnNUZHS1hRSnZxbnUwdWZzcUZjemRza0I5T0FMaVlYc3Ntaml1RUEwSGlCWGhJcHovTzBWRnlGeEltdlYyS2NlT0lFTU1GZmkwVWNTU1BqaEUyOXF0YVV3bDNIMWJrN1RMa05XZHpkYTZDR3BURnJwS3FhOVI4VGdLbmUxcGZzeGVOL1JKSElHOWJuaFJVeGM1a085Y3hCcGdxUHBiNC9yMTVjVnFIUzZlWllnaVF5N0NmMUJKN2lTTTdicGhPcFZ3VzhSWXVFKzlKcDE1SVFQemFpRllIdmJ1Y0w0OXVycTJMSHROM0hDWndOQ3hCR2xzWHVLRzQ3c2RjaGxVOGlQcVZZRnlEMUQxRDhscFUvbkUvS2lkb21uQXNFYXpWYldNQnZvU2FMdktCUnQwWEowb0E1NHphalVJNUkvVm95bWJEVVl2MmNVdUQwbGxjRmFIZFVlUWdQY055SndacHV6QVFtUGZrNFlPUWphazU0SUhacjgyUk5lUWR6eDZ0bzluVnRVcHlrY0xjOVRWbDhMb0Z1Yi9tMjRiWEQ0MU5TNXNIWWFUYTNnMDNhUldGS0RtV1BsZXE1UDNXRVkxUVAwKzB2d1BENmdyeWdtS2I2Z3R5WnNLalJrMmVjL291VjlGRVZpWXVCNmYxZStvMm8xZ2hLbTlUQnlvNGtRUGNMd1FMWmZuU0hMWkQxYVhjeVl3S2cwcTlRUWVXTGFvTEtKUEdIaDRWTy9xZ1M4TXc2cUZkYTFyKy82WEFLMGJQVlhpOWR3dllzeXRaMFU0ZytvNEcvQ1B5SURPSGFad3NBUDF1anFpY2RmTmxXdG82VHpMd0JVZThSQzdGYzJsNThjVXdrRzR5ait2SkJpRXh5M004OGlyS29sdVlOVVlMdGlTS0FhTnZwaWhjZmdMM3hFU1hBSEpsYXlGVGVuNUp1M1BQeWROM3ZqR082Z1pGaENwbm8zbzhkZHBrOHovUnE3RmpGS3JQb05LbVUyaTVPdDhXOG5hK2t6OVIzbDcvWEFoRFRIOWY2aWo0UWVFcXhQYnNFa0RldzRkOVFtY3RTWEJKVGZvVFowcDc5dEg4c3luS0pXZE1pK1l6aXFsS2s3dityUi9zVURMRVo5Q3F2TGZJbHpMYlRIS0t6NHdKNU9ZUmdXWHM0RDhhcGhwZ2Y2LmFXX281UG9ON21hYmVhQ2tTdC1USWU4MzhkRXhmdmVVUU1nMjJnOUFrVGw1NlFjTk5vSGdlUl90R1hjMUVqaklTMWdQV2x3R18wdmttcndPWEp2Wk5n"}
+2025-09-20T23:12:24.882+0800	INFO	login/login_impl.go:85	重新定向登录成功
+2025-09-20T23:12:24.882+0800	INFO	roll_call/roll_call_impl.go:286	登录成功	{"deviceID": "614e8458-abea-4804-a9bd-7f51c7f3bb11"}
+2025-09-20T23:12:24.882+0800	INFO	xmu_roll_call/main.go:28	登录成功	{"deviceId": "614e8458-abea-4804-a9bd-7f51c7f3bb11"}
+2025-09-20T23:12:24.882+0800	INFO	xmu_roll_call/main.go:66	服务启动，监听 8080 端口
+2025-09-20T23:13:14.609+0800	INFO	login/login_impl.go:43	抓取加密盐成功	{"encryp_salt": "J0SLkJwHFyMlxqe6"}
+2025-09-20T23:13:14.654+0800	INFO	login/login_impl.go:49	execution抓取成功	{"execution": "52c707a6-9dec-4def-8865-16b98d46d554_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuU2J4OXBlN0ZhbElLOUVRTmU5aEhpYTV5aGUyMkhaLzF3K2hySjUwWHFRUjJNcTBIWXNKcnhyYUxBeHFGOGtXdDdIekxnTzI3YVRwa25rcTlRY0k0M1RPWHpBREdSajByNjBQVFdnOTdYa3AwT3hRWDJkTGhlSzJTM3dNTHE0RUkzTFZDU2JKZ2I4bHBCT0Y2MFAwc0FEMHQ3aTZpRGx3c0dvOVlZN2dseWh4TmtydjlaWFFYUndSSVFTdDU1RDc0blRZSTkvWnI0b2pJT0p6ME51QWxpclV3YVo5RXY3ZXk0MDRHS1NjaHFHQ0hDYTdDTDlXaDBNUlMwcEJmWjZzVnRvZHcxV2QvOVR6bkVGKzErdzJhbkd0WW4wdDdNbS9aYlg5N3pWL1dCWVFSWVJpYTBmekZ0dXVMa1ZlbDJZcEwrNXRQTVBEVk9MZk9rbHBOYzc2VVcxcHl0RGNCcFVSaDVtM2czS0ErZUtNcVRXcHh4c1VTOFVOL3Bpc3hKeEtWUU5ubTlaeFZtY0NyQ2wrQjQ4VDdvcVh1eXI3Y2ROWkZJa3d3QjE3YjgyeWpVQ2IwQS9OUEY1M3poM3pTOWNkSk15dDhoU09DWEdxZ3FZTllHUnR0Zlg4blJqMXBhTUpEUFZGRUk5cjBlQlF1Y0RYRjhyVU5aNVMzT2tlcHpYMmwrK1B4bzBGSmJqd0RoRGVYQUY3Ynd5NmI3Vk9VSEtXSy9LbTRpM0VIL2VidDZISVlid0Z0TklIRmZBdjVURm1XOTZpeU1lbEZvdHp1NmJqRWIzL05TWlc0RW1ScWhvVzVpUnhLaXBPandIR2paNUtiOHM3Sm81dkQ3c25OR2VIT1dzbW96WFJ5NDkveDFhUFpnNUZHS1hRSnZxbnUwdWZzcUZjemRza0I5T0FMaVlYc3Ntaml1RUEwSGlCWGhJcHovTzBWRnlGeEltdlYyS2NlT0lFTU1GZmkwVWNTU1BqaEUyOXF0YVV3bDNIMWJrN1RMa05XZHpkYTZDR3BURnJwS3FhOVI4VGdLbmUxcGZzeGVOL1JKSElHOWJuaFJVeGM1a085Y3hCcGdxUHBiNC9yMTVjVnFIUzZlWllnaVF5N0NmMUJKN2lTTTdicGhPcFZ3VzhSWXVFKzlKcDE1SVFQemFpRllIdmJ1Y0w0OXVycTJMSHROM0hDWndOQ3hCR2xzWHVLRzQ3c2RjaGxVOGlQcVZZRnlEMUQxRDhscFUvbkUvS2lkb21uQXNFYXpWYldNQnZvU2FMdktCUnQwWEowb0E1NHphalVJNUkvVm95bWJEVVl2MmNVdUQwbGxjRmFIZFVlUWdQY055SndacHV6QVFtUGZrNFlPUWphazU0SUhacjgyUk5lUWR6eDZ0bzluVnRVcHlrY0xjOVRWbDhMb0Z1Yi9tMjRiWEQ0MU5TNXNIWWFUYTNnMDNhUldGS0RtV1BsZXE1UDNXRVkxUVAwKzB2d1BENmdyeWdtS2I2Z3R5WnNLalJrMmVjL291VjlGRVZpWXVCNmYxZStvMm8xZ2hLbTlUQnlvNGtRUGNMd1FMWmZuU0hMWkQxYVhjeVl3S2cwcTlRUWVXTGFvTEtKUEdIaDRWTy9xZ1M4TXc2cUZkYTFyKy82WEFLMGJQVlhpOWR3dllzeXRaMFU0ZytvNEcvQ1B5SURPSGFad3NBUDF1anFpY2RmTmxXdG82VHpMd0JVZThSQzdGYzJsNThjVXdrRzR5ait2SkJpRXh5M004OGlyS29sdVlOVVlMdGlTS0FhTnZwaWhjZmdMM3hFU1hBSEpsYXlGVGVuNUp1M1BQeWROM3ZqR082Z1pGaENwbm8zbzhkZHBrOHovUnE3RmpGS3JQb05LbVUyaTVPdDhXOG5hK2t6OVIzbDcvWEFoRFRIOWY2aWo0UWVFcXhQYnNFa0RldzRkOVFtY3RTWEJKVGZvVFowcDc5dEg4c3luS0pXZE1pK1l6aXFsS2s3dityUi9zVURMRVo5Q3F2TGZJbHpMYlRIS0t6NHdKNU9ZUmdXWHM0RDhhcGhwZ2Y2LmFXX281UG9ON21hYmVhQ2tTdC1USWU4MzhkRXhmdmVVUU1nMjJnOUFrVGw1NlFjTk5vSGdlUl90R1hjMUVqaklTMWdQV2x3R18wdmttcndPWEp2Wk5n"}
+2025-09-20T23:13:15.017+0800	INFO	login/login_impl.go:85	重新定向登录成功
+2025-09-20T23:13:15.017+0800	INFO	roll_call/roll_call_impl.go:286	登录成功	{"deviceID": "52c707a6-9dec-4def-8865-16b98d46d554"}
+2025-09-20T23:13:15.017+0800	INFO	xmu_roll_call/main.go:28	登录成功	{"deviceId": "52c707a6-9dec-4def-8865-16b98d46d554"}
+2025-09-20T23:13:15.017+0800	INFO	xmu_roll_call/main.go:66	服务启动，监听 8080 端口
+2025-09-20T23:13:52.406+0800	INFO	llms/llm_impl.go:126	LLM response	{"reply": "你是想了解 favicon.ico 是什么、如何生成它、如何在站点中使用，还是在排查相关报错？请告诉我你的具体需求。下面是快速要点：\n\n- 它是什么\n  - 浏览器标签页/书签的小图标。传统放在站点根目录 /favicon.ico 以兼容旧浏览器。\n\n- 最简接入\n  - 把文件放在网站根目录：/favicon.ico\n  - 在 <head> 中声明（可省略，但建议写）：\n    <link rel=\"icon\" href=\"/favicon.ico\" sizes=\"any\">\n\n- 现代做法（推荐）\n  - 同时提供 SVG（清晰可缩放）与 ICO（兼容）：\n    <link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\">\n    <link rel=\"icon\" href=\"/favicon.ico\" sizes=\"any\">\n  - iOS 桌面图标：\n    <link rel=\"apple-touch-icon\" href=\"/apple-touch-icon.png\" sizes=\"180x180\">\n  - Safari 固定标签（可选）：\n    <link rel=\"mask-icon\" href=\"/safari-pinned-tab.svg\" color=\"#5bbad5\">\n  - PWA manifest（可选）：在 manifest.json 里提供 192x192 和 512x512 PNG 图标\n\n- 如何生成 .ico（从 PNG）\n  - 安装 ImageMagick 后执行：\n    magick input.png -background none -define icon:auto-resize=16,32,48,64,128 favicon.ico\n\n- 放置位置（常见框架）\n  - Next.js：app 路由放 app/favicon.ico；pages 或常规项目放 public/favicon.ico\n  - Vite/CRA/静态站：放 public/favicon.ico\n\n- 服务器与缓存\n  - Content-Type: image/x-icon\n  - Cache-Control: public, max-age=31536000, immutable\n  - 更新图标不生效时，加版本号：/favicon.ico?v=2\n\n- 常见问题\n  - 浏览器会自动请求 /favicon.ico，即便你没写 link 标签\n  - 不显示或模糊：确保包含 16x16、32x32 等多尺寸；SVG 可提高清晰度\n  - 深浅色适配：可用 SVG 并在内部用 prefers-color-scheme 控制配色\n\n如果你需要，我可以：\n- 帮你把一张 PNG 生成 .ico 文件（可返回下载链接或 Base64）\n- 生成一个简洁的 SVG favicon 模板（支持暗黑模式）\n- 查看你的页面并指出 favicon 配置问题（贴链接或代码）"}
+2025-09-20T23:38:57.063+0800	INFO	login/login_impl.go:43	抓取加密盐成功	{"encryp_salt": "Hv9NxXTcJB7ev0YK"}
+2025-09-20T23:38:57.111+0800	INFO	login/login_impl.go:49	execution抓取成功	{"execution": "87fb474f-7b85-4b30-b9d8-564cd6228d56_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuU2J4OXBlN0ZhbElLOUVRTmU5aEhpYTV5aGUyMkhaLzF3K2hySjUwWHFRUjJNcTBIWXNKcnhyYUxBeHFGOGtXdDdIekxnTzI3YVRwa25rcTlRY0k0M1RPWHpBREdSajByNjBQVFdnOTdYa3AwT3hRWDJkTGhlSzJTM3dNTHE0RUkzTFZDU2JKZ2I4bHBCT0Y2MFAwc0FEMHQ3aTZpRGx3c0dvOVlZN2dseWh4TmtydjlaWFFYUndSSVFTdDU1RDc0blRZSTkvWnI0b2pJT0p6ME51QWxpclV3YVo5RXY3ZXk0MDRHS1NjaHFHQ0hDYTdDTDlXaDBNUlMwcEJmWjZzVnRvZHcxV2QvOVR6bkVGKzErdzJhbkd0WW4wdDdNbS9aYlg5N3pWL1dCWVFSWVJpYTBmekZ0dXVMa1ZlbDJZcEwrNXRQTVBEVk9MZk9rbHBOYzc2VVcxcHl0RGNCcFVSaDVtM2czS0ErZUtNcVRXcHh4c1VTOFVOL3Bpc3hKeEtWUU5ubTlaeFZtY0NyQ2wrQjQ4VDdvcVh1eXI3Y2ROWkZJa3d3QjE3YjgyeWpVQ2IwQS9OUEY1M3poM3pTOWNkSk15dDhoU09DWEdxZ3FZTllHUnR0Zlg4blJqMXBhTUpEUFZGRUk5cjBlQlF1Y0RYRjhyVU5aNVMzT2tlcHpYMmwrK1B4bzBGSmJqd0RoRGVYQUY3Ynd5NmI3Vk9VSEtXSy9LbTRpM0VIL2VidDZISVlid0Z0TklIRmZBdjVURm1XOTZpeU1lbEZvdHp1NmJqRWIzL05TWlc0RW1ScWhvVzVpUnhLaXBPandIR2paNUtiOHM3Sm81dkQ3c25OR2VIT1dzbW96WFJ5NDkveDFhUFpnNUZHS1hRSnZxbnUwdWZzcUZjemRza0I5T0FMaVlYc3Ntaml1RUEwSGlCWGhJcHovTzBWRnlGeEltdlYyS2NlT0lFTU1GZmkwVWNTU1BqaEUyOXF0YVV3bDNIMWJrN1RMa05XZHpkYTZDR3BURnJwS3FhOVI4VGdLbmUxcGZzeGVOL1JKSElHOWJuaFJVeGM1a085Y3hCcGdxUHBiNC9yMTVjVnFIUzZlWllnaVF5N0NmMUJKN2lTTTdicGhPcFZ3VzhSWXVFKzlKcDE1SVFQemFpRllIdmJ1Y0w0OXVycTJMSHROM0hDWndOQ3hCR2xzWHVLRzQ3c2RjaGxVOGlQcVZZRnlEMUQxRDhscFUvbkUvS2lkb21uQXNFYXpWYldNQnZvU2FMdktCUnQwWEowb0E1NHphalVJNUkvVm95bWJEVVl2MmNVdUQwbGxjRmFIZFVlUWdQY055SndacHV6QVFtUGZrNFlPUWphazU0SUhacjgyUk5lUWR6eDZ0bzluVnRVcHlrY0xjOVRWbDhMb0Z1Yi9tMjRiWEQ0MU5TNXNIWWFUYTNnMDNhUldGS0RtV1BsZXE1UDNXRVkxUVAwKzB2d1BENmdyeWdtS2I2Z3R5WnNLalJrMmVjL291VjlGRVZpWXVCNmYxZStvMm8xZ2hLbTlUQnlvNGtRUGNMd1FMWmZuU0hMWkQxYVhjeVl3S2cwcTlRUWVXTGFvTEtKUEdIaDRWTy9xZ1M4TXc2cUZkYTFyKy82WEFLMGJQVlhpOWR3dllzeXRaMFU0ZytvNEcvQ1B5SURPSGFad3NBUDF1anFpY2RmTmxXdG82VHpMd0JVZThSQzdGYzJsNThjVXdrRzR5ait2SkJpRXh5M004OGlyS29sdVlOVVlMdGlTS0FhTnZwaWhjZmdMM3hFU1hBSEpsYXlGVGVuNUp1M1BQeWROM3ZqR082Z1pGaENwbm8zbzhkZHBrOHovUnE3RmpGS3JQb05LbVUyaTVPdDhXOG5hK2t6OVIzbDcvWEFoRFRIOWY2aWo0UWVFcXhQYnNFa0RldzRkOVFtY3RTWEJKVGZvVFowcDc5dEg4c3luS0pXZE1pK1l6aXFsS2s3dityUi9zVURMRVo5Q3F2TGZJbHpMYlRIS0t6NHdKNU9ZUmdXWHM0RDhhcGhwZ2Y2LmFXX281UG9ON21hYmVhQ2tTdC1USWU4MzhkRXhmdmVVUU1nMjJnOUFrVGw1NlFjTk5vSGdlUl90R1hjMUVqaklTMWdQV2x3R18wdmttcndPWEp2Wk5n"}
+2025-09-20T23:38:57.254+0800	INFO	login/login_impl.go:85	重新定向登录成功
+2025-09-20T23:38:57.254+0800	INFO	roll_call/roll_call_impl.go:267	登录成功	{"deviceID": "87fb474f-7b85-4b30-b9d8-564cd6228d56"}
+2025-09-20T23:38:57.254+0800	INFO	xmu_roll_call/main.go:28	登录成功	{"deviceId": "87fb474f-7b85-4b30-b9d8-564cd6228d56"}
+2025-09-20T23:38:57.254+0800	INFO	xmu_roll_call/main.go:66	服务启动，监听 8080 端口
+2025-09-20T23:41:58.485+0800	INFO	login/login_impl.go:43	抓取加密盐成功	{"encryp_salt": "oNMwsIGYDqZIeQmc"}
+2025-09-20T23:41:58.531+0800	INFO	login/login_impl.go:49	execution抓取成功	{"execution": "668386d1-375a-4ae5-84f8-c2372cff9b3e_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuU2J4OXBlN0ZhbElLOUVRTmU5aEhpYTV5aGUyMkhaLzF3K2hySjUwWHFRUjJNcTBIWXNKcnhyYUxBeHFGOGtXdDdIekxnTzI3YVRwa25rcTlRY0k0M1RPWHpBREdSajByNjBQVFdnOTdYa3AwT3hRWDJkTGhlSzJTM3dNTHE0RUkzTFZDU2JKZ2I4bHBCT0Y2MFAwc0FEMHQ3aTZpRGx3c0dvOVlZN2dseWh4TmtydjlaWFFYUndSSVFTdDU1RDc0blRZSTkvWnI0b2pJT0p6ME51QWxpclV3YVo5RXY3ZXk0MDRHS1NjaHFHQ0hDYTdDTDlXaDBNUlMwcEJmWjZzVnRvZHcxV2QvOVR6bkVGKzErdzJhbkd0WW4wdDdNbS9aYlg5N3pWL1dCWVFSWVJpYTBmekZ0dXVMa1ZlbDJZcEwrNXRQTVBEVk9MZk9rbHBOYzc2VVcxcHl0RGNCcFVSaDVtM2czS0ErZUtNcVRXcHh4c1VTOFVOL3Bpc3hKeEtWUU5ubTlaeFZtY0NyQ2wrQjQ4VDdvcVh1eXI3Y2ROWkZJa3d3QjE3YjgyeWpVQ2IwQS9OUEY1M3poM3pTOWNkSk15dDhoU09DWEdxZ3FZTllHUnR0Zlg4blJqMXBhTUpEUFZGRUk5cjBlQlF1Y0RYRjhyVU5aNVMzT2tlcHpYMmwrK1B4bzBGSmJqd0RoRGVYQUY3Ynd5NmI3Vk9VSEtXSy9LbTRpM0VIL2VidDZISVlid0Z0TklIRmZBdjVURm1XOTZpeU1lbEZvdHp1NmJqRWIzL05TWlc0RW1ScWhvVzVpUnhLaXBPandIR2paNUtiOHM3Sm81dkQ3c25OR2VIT1dzbW96WFJ5NDkveDFhUFpnNUZHS1hRSnZxbnUwdWZzcUZjemRza0I5T0FMaVlYc3Ntaml1RUEwSGlCWGhJcHovTzBWRnlGeEltdlYyS2NlT0lFTU1GZmkwVWNTU1BqaEUyOXF0YVV3bDNIMWJrN1RMa05XZHpkYTZDR3BURnJwS3FhOVI4VGdLbmUxcGZzeGVOL1JKSElHOWJuaFJVeGM1a085Y3hCcGdxUHBiNC9yMTVjVnFIUzZlWllnaVF5N0NmMUJKN2lTTTdicGhPcFZ3VzhSWXVFKzlKcDE1SVFQemFpRllIdmJ1Y0w0OXVycTJMSHROM0hDWndOQ3hCR2xzWHVLRzQ3c2RjaGxVOGlQcVZZRnlEMUQxRDhscFUvbkUvS2lkb21uQXNFYXpWYldNQnZvU2FMdktCUnQwWEowb0E1NHphalVJNUkvVm95bWJEVVl2MmNVdUQwbGxjRmFIZFVlUWdQY055SndacHV6QVFtUGZrNFlPUWphazU0SUhacjgyUk5lUWR6eDZ0bzluVnRVcHlrY0xjOVRWbDhMb0Z1Yi9tMjRiWEQ0MU5TNXNIWWFUYTNnMDNhUldGS0RtV1BsZXE1UDNXRVkxUVAwKzB2d1BENmdyeWdtS2I2Z3R5WnNLalJrMmVjL291VjlGRVZpWXVCNmYxZStvMm8xZ2hLbTlUQnlvNGtRUGNMd1FMWmZuU0hMWkQxYVhjeVl3S2cwcTlRUWVXTGFvTEtKUEdIaDRWTy9xZ1M4TXc2cUZkYTFyKy82WEFLMGJQVlhpOWR3dllzeXRaMFU0ZytvNEcvQ1B5SURPSGFad3NBUDF1anFpY2RmTmxXdG82VHpMd0JVZThSQzdGYzJsNThjVXdrRzR5ait2SkJpRXh5M004OGlyS29sdVlOVVlMdGlTS0FhTnZwaWhjZmdMM3hFU1hBSEpsYXlGVGVuNUp1M1BQeWROM3ZqR082Z1pGaENwbm8zbzhkZHBrOHovUnE3RmpGS3JQb05LbVUyaTVPdDhXOG5hK2t6OVIzbDcvWEFoRFRIOWY2aWo0UWVFcXhQYnNFa0RldzRkOVFtY3RTWEJKVGZvVFowcDc5dEg4c3luS0pXZE1pK1l6aXFsS2s3dityUi9zVURMRVo5Q3F2TGZJbHpMYlRIS0t6NHdKNU9ZUmdXWHM0RDhhcGhwZ2Y2LmFXX281UG9ON21hYmVhQ2tTdC1USWU4MzhkRXhmdmVVUU1nMjJnOUFrVGw1NlFjTk5vSGdlUl90R1hjMUVqaklTMWdQV2x3R18wdmttcndPWEp2Wk5n"}
+2025-09-20T23:41:58.681+0800	INFO	login/login_impl.go:85	重新定向登录成功
+2025-09-20T23:41:58.682+0800	INFO	roll_call/roll_call_impl.go:267	登录成功	{"deviceID": "668386d1-375a-4ae5-84f8-c2372cff9b3e"}
+2025-09-20T23:41:58.682+0800	INFO	xmu_roll_call/main.go:28	登录成功	{"deviceId": "668386d1-375a-4ae5-84f8-c2372cff9b3e"}
+2025-09-20T23:41:58.682+0800	INFO	xmu_roll_call/main.go:66	服务启动，监听 8080 端口
+2025-09-20T23:42:11.781+0800	ERROR	llms/llm_impl.go:108	LLM API request error	{"error": "Post \"https://b4u.qzz.io/v1/chat/completions\": net/http: TLS handshake timeout"}
+xmu_roll_call/app_plus/llms.Translate
+	D:/Projects/xmu_roll_call/app_plus/llms/llm_impl.go:108
+main.main.func2
+	D:/Projects/xmu_roll_call/main.go:40
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+xmu_roll_call/initialize.InitRouter.CORSMiddleware.func1
+	D:/Projects/xmu_roll_call/initialize/router.go:24
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/logger.go:249
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:644
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:600
+net/http.serverHandler.ServeHTTP
+	D:/gosdk/go1.24.4/src/net/http/server.go:3301
+net/http.(*conn).serve
+	D:/gosdk/go1.24.4/src/net/http/server.go:2102
+2025-09-20T23:42:11.782+0800	ERROR	xmu_roll_call/main.go:43	Translate failed	{"error": "Post \"https://b4u.qzz.io/v1/chat/completions\": net/http: TLS handshake timeout"}
+main.main.func2
+	D:/Projects/xmu_roll_call/main.go:43
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+xmu_roll_call/initialize.InitRouter.CORSMiddleware.func1
+	D:/Projects/xmu_roll_call/initialize/router.go:24
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/logger.go:249
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:644
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:600
+net/http.serverHandler.ServeHTTP
+	D:/gosdk/go1.24.4/src/net/http/server.go:3301
+net/http.(*conn).serve
+	D:/gosdk/go1.24.4/src/net/http/server.go:2102
+2025-09-20T23:42:12.344+0800	ERROR	llms/llm_impl.go:108	LLM API request error	{"error": "Post \"https://zone.veloeracompletions.org/v1/chat/\": dial tcp: lookup zone.veloeracompletions.org: no such host"}
+xmu_roll_call/app_plus/llms.Translate
+	D:/Projects/xmu_roll_call/app_plus/llms/llm_impl.go:108
+main.main.func2
+	D:/Projects/xmu_roll_call/main.go:40
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+xmu_roll_call/initialize.InitRouter.CORSMiddleware.func1
+	D:/Projects/xmu_roll_call/initialize/router.go:24
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/logger.go:249
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:644
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:600
+net/http.serverHandler.ServeHTTP
+	D:/gosdk/go1.24.4/src/net/http/server.go:3301
+net/http.(*conn).serve
+	D:/gosdk/go1.24.4/src/net/http/server.go:2102
+2025-09-20T23:42:12.344+0800	ERROR	xmu_roll_call/main.go:43	Translate failed	{"error": "Post \"https://zone.veloeracompletions.org/v1/chat/\": dial tcp: lookup zone.veloeracompletions.org: no such host"}
+main.main.func2
+	D:/Projects/xmu_roll_call/main.go:43
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+xmu_roll_call/initialize.InitRouter.CORSMiddleware.func1
+	D:/Projects/xmu_roll_call/initialize/router.go:24
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/logger.go:249
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:644
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:600
+net/http.serverHandler.ServeHTTP
+	D:/gosdk/go1.24.4/src/net/http/server.go:3301
+net/http.(*conn).serve
+	D:/gosdk/go1.24.4/src/net/http/server.go:2102
+2025-09-20T23:43:05.015+0800	INFO	login/login_impl.go:43	抓取加密盐成功	{"encryp_salt": "NeZcNYg1t27lqirI"}
+2025-09-20T23:43:05.061+0800	INFO	login/login_impl.go:49	execution抓取成功	{"execution": "2a2548b0-b558-4793-a85f-c3e77b46837c_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuU2J4OXBlN0ZhbElLOUVRTmU5aEhpYTV5aGUyMkhaLzF3K2hySjUwWHFRUjJNcTBIWXNKcnhyYUxBeHFGOGtXdDdIekxnTzI3YVRwa25rcTlRY0k0M1RPWHpBREdSajByNjBQVFdnOTdYa3AwT3hRWDJkTGhlSzJTM3dNTHE0RUkzTFZDU2JKZ2I4bHBCT0Y2MFAwc0FEMHQ3aTZpRGx3c0dvOVlZN2dseWh4TmtydjlaWFFYUndSSVFTdDU1RDc0blRZSTkvWnI0b2pJT0p6ME51QWxpclV3YVo5RXY3ZXk0MDRHS1NjaHFHQ0hDYTdDTDlXaDBNUlMwcEJmWjZzVnRvZHcxV2QvOVR6bkVGKzErdzJhbkd0WW4wdDdNbS9aYlg5N3pWL1dCWVFSWVJpYTBmekZ0dXVMa1ZlbDJZcEwrNXRQTVBEVk9MZk9rbHBOYzc2VVcxcHl0RGNCcFVSaDVtM2czS0ErZUtNcVRXcHh4c1VTOFVOL3Bpc3hKeEtWUU5ubTlaeFZtY0NyQ2wrQjQ4VDdvcVh1eXI3Y2ROWkZJa3d3QjE3YjgyeWpVQ2IwQS9OUEY1M3poM3pTOWNkSk15dDhoU09DWEdxZ3FZTllHUnR0Zlg4blJqMXBhTUpEUFZGRUk5cjBlQlF1Y0RYRjhyVU5aNVMzT2tlcHpYMmwrK1B4bzBGSmJqd0RoRGVYQUY3Ynd5NmI3Vk9VSEtXSy9LbTRpM0VIL2VidDZISVlid0Z0TklIRmZBdjVURm1XOTZpeU1lbEZvdHp1NmJqRWIzL05TWlc0RW1ScWhvVzVpUnhLaXBPandIR2paNUtiOHM3Sm81dkQ3c25OR2VIT1dzbW96WFJ5NDkveDFhUFpnNUZHS1hRSnZxbnUwdWZzcUZjemRza0I5T0FMaVlYc3Ntaml1RUEwSGlCWGhJcHovTzBWRnlGeEltdlYyS2NlT0lFTU1GZmkwVWNTU1BqaEUyOXF0YVV3bDNIMWJrN1RMa05XZHpkYTZDR3BURnJwS3FhOVI4VGdLbmUxcGZzeGVOL1JKSElHOWJuaFJVeGM1a085Y3hCcGdxUHBiNC9yMTVjVnFIUzZlWllnaVF5N0NmMUJKN2lTTTdicGhPcFZ3VzhSWXVFKzlKcDE1SVFQemFpRllIdmJ1Y0w0OXVycTJMSHROM0hDWndOQ3hCR2xzWHVLRzQ3c2RjaGxVOGlQcVZZRnlEMUQxRDhscFUvbkUvS2lkb21uQXNFYXpWYldNQnZvU2FMdktCUnQwWEowb0E1NHphalVJNUkvVm95bWJEVVl2MmNVdUQwbGxjRmFIZFVlUWdQY055SndacHV6QVFtUGZrNFlPUWphazU0SUhacjgyUk5lUWR6eDZ0bzluVnRVcHlrY0xjOVRWbDhMb0Z1Yi9tMjRiWEQ0MU5TNXNIWWFUYTNnMDNhUldGS0RtV1BsZXE1UDNXRVkxUVAwKzB2d1BENmdyeWdtS2I2Z3R5WnNLalJrMmVjL291VjlGRVZpWXVCNmYxZStvMm8xZ2hLbTlUQnlvNGtRUGNMd1FMWmZuU0hMWkQxYVhjeVl3S2cwcTlRUWVXTGFvTEtKUEdIaDRWTy9xZ1M4TXc2cUZkYTFyKy82WEFLMGJQVlhpOWR3dllzeXRaMFU0ZytvNEcvQ1B5SURPSGFad3NBUDF1anFpY2RmTmxXdG82VHpMd0JVZThSQzdGYzJsNThjVXdrRzR5ait2SkJpRXh5M004OGlyS29sdVlOVVlMdGlTS0FhTnZwaWhjZmdMM3hFU1hBSEpsYXlGVGVuNUp1M1BQeWROM3ZqR082Z1pGaENwbm8zbzhkZHBrOHovUnE3RmpGS3JQb05LbVUyaTVPdDhXOG5hK2t6OVIzbDcvWEFoRFRIOWY2aWo0UWVFcXhQYnNFa0RldzRkOVFtY3RTWEJKVGZvVFowcDc5dEg4c3luS0pXZE1pK1l6aXFsS2s3dityUi9zVURMRVo5Q3F2TGZJbHpMYlRIS0t6NHdKNU9ZUmdXWHM0RDhhcGhwZ2Y2LmFXX281UG9ON21hYmVhQ2tTdC1USWU4MzhkRXhmdmVVUU1nMjJnOUFrVGw1NlFjTk5vSGdlUl90R1hjMUVqaklTMWdQV2x3R18wdmttcndPWEp2Wk5n"}
+2025-09-20T23:43:05.211+0800	INFO	login/login_impl.go:85	重新定向登录成功
+2025-09-20T23:43:05.211+0800	INFO	roll_call/roll_call_impl.go:267	登录成功	{"deviceID": "2a2548b0-b558-4793-a85f-c3e77b46837c"}
+2025-09-20T23:43:05.211+0800	INFO	xmu_roll_call/main.go:28	登录成功	{"deviceId": "2a2548b0-b558-4793-a85f-c3e77b46837c"}
+2025-09-20T23:43:05.211+0800	INFO	xmu_roll_call/main.go:66	服务启动，监听 8080 端口
+2025-09-20T23:43:15.484+0800	ERROR	llms/llm_impl.go:108	LLM API request error	{"error": "Post \"https://zone.veloeracompletions.org/v1/chat/\": dial tcp: lookup zone.veloeracompletions.org: no such host"}
+xmu_roll_call/app_plus/llms.Translate
+	D:/Projects/xmu_roll_call/app_plus/llms/llm_impl.go:108
+main.main.func2
+	D:/Projects/xmu_roll_call/main.go:40
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+xmu_roll_call/initialize.InitRouter.CORSMiddleware.func1
+	D:/Projects/xmu_roll_call/initialize/router.go:24
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/logger.go:249
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:644
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:600
+net/http.serverHandler.ServeHTTP
+	D:/gosdk/go1.24.4/src/net/http/server.go:3301
+net/http.(*conn).serve
+	D:/gosdk/go1.24.4/src/net/http/server.go:2102
+2025-09-20T23:43:15.484+0800	ERROR	xmu_roll_call/main.go:43	Translate failed	{"error": "Post \"https://zone.veloeracompletions.org/v1/chat/\": dial tcp: lookup zone.veloeracompletions.org: no such host"}
+main.main.func2
+	D:/Projects/xmu_roll_call/main.go:43
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+xmu_roll_call/initialize.InitRouter.CORSMiddleware.func1
+	D:/Projects/xmu_roll_call/initialize/router.go:24
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/logger.go:249
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:644
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:600
+net/http.serverHandler.ServeHTTP
+	D:/gosdk/go1.24.4/src/net/http/server.go:3301
+net/http.(*conn).serve
+	D:/gosdk/go1.24.4/src/net/http/server.go:2102
+2025-09-20T23:43:15.684+0800	ERROR	llms/llm_impl.go:108	LLM API request error	{"error": "Post \"https://zone.veloeracompletions.org/v1/chat/\": dial tcp: lookup zone.veloeracompletions.org: no such host"}
+xmu_roll_call/app_plus/llms.Translate
+	D:/Projects/xmu_roll_call/app_plus/llms/llm_impl.go:108
+main.main.func2
+	D:/Projects/xmu_roll_call/main.go:40
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+xmu_roll_call/initialize.InitRouter.CORSMiddleware.func1
+	D:/Projects/xmu_roll_call/initialize/router.go:24
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/logger.go:249
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:644
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:600
+net/http.serverHandler.ServeHTTP
+	D:/gosdk/go1.24.4/src/net/http/server.go:3301
+net/http.(*conn).serve
+	D:/gosdk/go1.24.4/src/net/http/server.go:2102
+2025-09-20T23:43:15.685+0800	ERROR	xmu_roll_call/main.go:43	Translate failed	{"error": "Post \"https://zone.veloeracompletions.org/v1/chat/\": dial tcp: lookup zone.veloeracompletions.org: no such host"}
+main.main.func2
+	D:/Projects/xmu_roll_call/main.go:43
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+xmu_roll_call/initialize.InitRouter.CORSMiddleware.func1
+	D:/Projects/xmu_roll_call/initialize/router.go:24
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/logger.go:249
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:644
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:600
+net/http.serverHandler.ServeHTTP
+	D:/gosdk/go1.24.4/src/net/http/server.go:3301
+net/http.(*conn).serve
+	D:/gosdk/go1.24.4/src/net/http/server.go:2102
+2025-09-20T23:43:19.023+0800	INFO	llms/llm_impl.go:131	LLM response	{"reply": " 你好！很高兴认识你。我是Claude，一个AI助手。有什么我可以帮助你的吗？无论是回答问题、协助工作、创作内容还是其他任何需求，我都很乐意为你提供帮助。"}
+2025-09-20T23:44:14.507+0800	INFO	login/login_impl.go:43	抓取加密盐成功	{"encryp_salt": "wajqFBfV5d0g7BTv"}
+2025-09-20T23:44:14.584+0800	INFO	login/login_impl.go:49	execution抓取成功	{"execution": "9aa3316a-ce9f-4422-a58c-6015a930e21c_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuU2J4OXBlN0ZhbElLOUVRTmU5aEhpYTV5aGUyMkhaLzF3K2hySjUwWHFRUjJNcTBIWXNKcnhyYUxBeHFGOGtXdDdIekxnTzI3YVRwa25rcTlRY0k0M1RPWHpBREdSajByNjBQVFdnOTdYa3AwT3hRWDJkTGhlSzJTM3dNTHE0RUkzTFZDU2JKZ2I4bHBCT0Y2MFAwc0FEMHQ3aTZpRGx3c0dvOVlZN2dseWh4TmtydjlaWFFYUndSSVFTdDU1RDc0blRZSTkvWnI0b2pJT0p6ME51QWxpclV3YVo5RXY3ZXk0MDRHS1NjaHFHQ0hDYTdDTDlXaDBNUlMwcEJmWjZzVnRvZHcxV2QvOVR6bkVGKzErdzJhbkd0WW4wdDdNbS9aYlg5N3pWL1dCWVFSWVJpYTBmekZ0dXVMa1ZlbDJZcEwrNXRQTVBEVk9MZk9rbHBOYzc2VVcxcHl0RGNCcFVSaDVtM2czS0ErZUtNcVRXcHh4c1VTOFVOL3Bpc3hKeEtWUU5ubTlaeFZtY0NyQ2wrQjQ4VDdvcVh1eXI3Y2ROWkZJa3d3QjE3YjgyeWpVQ2IwQS9OUEY1M3poM3pTOWNkSk15dDhoU09DWEdxZ3FZTllHUnR0Zlg4blJqMXBhTUpEUFZGRUk5cjBlQlF1Y0RYRjhyVU5aNVMzT2tlcHpYMmwrK1B4bzBGSmJqd0RoRGVYQUY3Ynd5NmI3Vk9VSEtXSy9LbTRpM0VIL2VidDZISVlid0Z0TklIRmZBdjVURm1XOTZpeU1lbEZvdHp1NmJqRWIzL05TWlc0RW1ScWhvVzVpUnhLaXBPandIR2paNUtiOHM3Sm81dkQ3c25OR2VIT1dzbW96WFJ5NDkveDFhUFpnNUZHS1hRSnZxbnUwdWZzcUZjemRza0I5T0FMaVlYc3Ntaml1RUEwSGlCWGhJcHovTzBWRnlGeEltdlYyS2NlT0lFTU1GZmkwVWNTU1BqaEUyOXF0YVV3bDNIMWJrN1RMa05XZHpkYTZDR3BURnJwS3FhOVI4VGdLbmUxcGZzeGVOL1JKSElHOWJuaFJVeGM1a085Y3hCcGdxUHBiNC9yMTVjVnFIUzZlWllnaVF5N0NmMUJKN2lTTTdicGhPcFZ3VzhSWXVFKzlKcDE1SVFQemFpRllIdmJ1Y0w0OXVycTJMSHROM0hDWndOQ3hCR2xzWHVLRzQ3c2RjaGxVOGlQcVZZRnlEMUQxRDhscFUvbkUvS2lkb21uQXNFYXpWYldNQnZvU2FMdktCUnQwWEowb0E1NHphalVJNUkvVm95bWJEVVl2MmNVdUQwbGxjRmFIZFVlUWdQY055SndacHV6QVFtUGZrNFlPUWphazU0SUhacjgyUk5lUWR6eDZ0bzluVnRVcHlrY0xjOVRWbDhMb0Z1Yi9tMjRiWEQ0MU5TNXNIWWFUYTNnMDNhUldGS0RtV1BsZXE1UDNXRVkxUVAwKzB2d1BENmdyeWdtS2I2Z3R5WnNLalJrMmVjL291VjlGRVZpWXVCNmYxZStvMm8xZ2hLbTlUQnlvNGtRUGNMd1FMWmZuU0hMWkQxYVhjeVl3S2cwcTlRUWVXTGFvTEtKUEdIaDRWTy9xZ1M4TXc2cUZkYTFyKy82WEFLMGJQVlhpOWR3dllzeXRaMFU0ZytvNEcvQ1B5SURPSGFad3NBUDF1anFpY2RmTmxXdG82VHpMd0JVZThSQzdGYzJsNThjVXdrRzR5ait2SkJpRXh5M004OGlyS29sdVlOVVlMdGlTS0FhTnZwaWhjZmdMM3hFU1hBSEpsYXlGVGVuNUp1M1BQeWROM3ZqR082Z1pGaENwbm8zbzhkZHBrOHovUnE3RmpGS3JQb05LbVUyaTVPdDhXOG5hK2t6OVIzbDcvWEFoRFRIOWY2aWo0UWVFcXhQYnNFa0RldzRkOVFtY3RTWEJKVGZvVFowcDc5dEg4c3luS0pXZE1pK1l6aXFsS2s3dityUi9zVURMRVo5Q3F2TGZJbHpMYlRIS0t6NHdKNU9ZUmdXWHM0RDhhcGhwZ2Y2LmFXX281UG9ON21hYmVhQ2tTdC1USWU4MzhkRXhmdmVVUU1nMjJnOUFrVGw1NlFjTk5vSGdlUl90R1hjMUVqaklTMWdQV2x3R18wdmttcndPWEp2Wk5n"}
+2025-09-20T23:44:14.737+0800	INFO	login/login_impl.go:85	重新定向登录成功
+2025-09-20T23:44:14.737+0800	INFO	roll_call/roll_call_impl.go:267	登录成功	{"deviceID": "9aa3316a-ce9f-4422-a58c-6015a930e21c"}
+2025-09-20T23:44:14.737+0800	INFO	xmu_roll_call/main.go:28	登录成功	{"deviceId": "9aa3316a-ce9f-4422-a58c-6015a930e21c"}
+2025-09-20T23:44:14.737+0800	INFO	xmu_roll_call/main.go:66	服务启动，监听 8080 端口
+2025-09-20T23:44:33.264+0800	INFO	llms/llm_impl.go:131	LLM response	{"reply": " 你好！很高兴和你聊天。我是Claude，一个由Anthropic创建的AI助手。有什么我可以帮助你的吗？无论是回答问题、协助工作任务，还是随便聊天，我都很乐意为你提供帮助。"}
+2025-09-20T23:44:34.476+0800	ERROR	llms/llm_impl.go:108	LLM API request error	{"error": "Post \"https://zone.veloeracompletions.org/v1/chat/\": dial tcp: lookup zone.veloeracompletions.org: no such host"}
+xmu_roll_call/app_plus/llms.Translate
+	D:/Projects/xmu_roll_call/app_plus/llms/llm_impl.go:108
+main.main.func2
+	D:/Projects/xmu_roll_call/main.go:40
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+xmu_roll_call/initialize.InitRouter.CORSMiddleware.func1
+	D:/Projects/xmu_roll_call/initialize/router.go:24
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/logger.go:249
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:644
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:600
+net/http.serverHandler.ServeHTTP
+	D:/gosdk/go1.24.4/src/net/http/server.go:3301
+net/http.(*conn).serve
+	D:/gosdk/go1.24.4/src/net/http/server.go:2102
+2025-09-20T23:44:34.476+0800	ERROR	xmu_roll_call/main.go:43	Translate failed	{"error": "Post \"https://zone.veloeracompletions.org/v1/chat/\": dial tcp: lookup zone.veloeracompletions.org: no such host"}
+main.main.func2
+	D:/Projects/xmu_roll_call/main.go:43
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+xmu_roll_call/initialize.InitRouter.CORSMiddleware.func1
+	D:/Projects/xmu_roll_call/initialize/router.go:24
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/logger.go:249
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:644
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:600
+net/http.serverHandler.ServeHTTP
+	D:/gosdk/go1.24.4/src/net/http/server.go:3301
+net/http.(*conn).serve
+	D:/gosdk/go1.24.4/src/net/http/server.go:2102
+2025-09-20T23:44:48.778+0800	ERROR	llms/llm_impl.go:108	LLM API request error	{"error": "Post \"https://zone.veloeracompletions.org/v1/chat/\": dial tcp: lookup zone.veloeracompletions.org: no such host"}
+xmu_roll_call/app_plus/llms.Translate
+	D:/Projects/xmu_roll_call/app_plus/llms/llm_impl.go:108
+main.main.func2
+	D:/Projects/xmu_roll_call/main.go:40
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+xmu_roll_call/initialize.InitRouter.CORSMiddleware.func1
+	D:/Projects/xmu_roll_call/initialize/router.go:24
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/logger.go:249
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:644
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:600
+net/http.serverHandler.ServeHTTP
+	D:/gosdk/go1.24.4/src/net/http/server.go:3301
+net/http.(*conn).serve
+	D:/gosdk/go1.24.4/src/net/http/server.go:2102
+2025-09-20T23:44:48.778+0800	ERROR	xmu_roll_call/main.go:43	Translate failed	{"error": "Post \"https://zone.veloeracompletions.org/v1/chat/\": dial tcp: lookup zone.veloeracompletions.org: no such host"}
+main.main.func2
+	D:/Projects/xmu_roll_call/main.go:43
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+xmu_roll_call/initialize.InitRouter.CORSMiddleware.func1
+	D:/Projects/xmu_roll_call/initialize/router.go:24
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/logger.go:249
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:644
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:600
+net/http.serverHandler.ServeHTTP
+	D:/gosdk/go1.24.4/src/net/http/server.go:3301
+net/http.(*conn).serve
+	D:/gosdk/go1.24.4/src/net/http/server.go:2102
+2025-09-20T23:44:48.956+0800	ERROR	llms/llm_impl.go:108	LLM API request error	{"error": "Post \"https://zone.veloeracompletions.org/v1/chat/\": dial tcp: lookup zone.veloeracompletions.org: no such host"}
+xmu_roll_call/app_plus/llms.Translate
+	D:/Projects/xmu_roll_call/app_plus/llms/llm_impl.go:108
+main.main.func2
+	D:/Projects/xmu_roll_call/main.go:40
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+xmu_roll_call/initialize.InitRouter.CORSMiddleware.func1
+	D:/Projects/xmu_roll_call/initialize/router.go:24
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/logger.go:249
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:644
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:600
+net/http.serverHandler.ServeHTTP
+	D:/gosdk/go1.24.4/src/net/http/server.go:3301
+net/http.(*conn).serve
+	D:/gosdk/go1.24.4/src/net/http/server.go:2102
+2025-09-20T23:44:48.956+0800	ERROR	xmu_roll_call/main.go:43	Translate failed	{"error": "Post \"https://zone.veloeracompletions.org/v1/chat/\": dial tcp: lookup zone.veloeracompletions.org: no such host"}
+main.main.func2
+	D:/Projects/xmu_roll_call/main.go:43
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+xmu_roll_call/initialize.InitRouter.CORSMiddleware.func1
+	D:/Projects/xmu_roll_call/initialize/router.go:24
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/logger.go:249
+github.com/gin-gonic/gin.(*Context).Next
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/context.go:185
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:644
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	D:/golang/pkg/mod/github.com/gin-gonic/gin@v1.10.1/gin.go:600
+net/http.serverHandler.ServeHTTP
+	D:/gosdk/go1.24.4/src/net/http/server.go:3301
+net/http.(*conn).serve
+	D:/gosdk/go1.24.4/src/net/http/server.go:2102
+2025-09-20T23:47:46.739+0800	INFO	login/login_impl.go:43	抓取加密盐成功	{"encryp_salt": "2gUCdfKtUkv7ndwC"}
+2025-09-20T23:47:46.783+0800	INFO	login/login_impl.go:49	execution抓取成功	{"execution": "f0043dd0-1a45-482a-820b-abe22a3080bf_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuU2J4OXBlN0ZhbElLOUVRTmU5aEhpYTV5aGUyMkhaLzF3K2hySjUwWHFRUjJNcTBIWXNKcnhyYUxBeHFGOGtXdDdIekxnTzI3YVRwa25rcTlRY0k0M1RPWHpBREdSajByNjBQVFdnOTdYa3AwT3hRWDJkTGhlSzJTM3dNTHE0RUkzTFZDU2JKZ2I4bHBCT0Y2MFAwc0FEMHQ3aTZpRGx3c0dvOVlZN2dseWh4TmtydjlaWFFYUndSSVFTdDU1RDc0blRZSTkvWnI0b2pJT0p6ME51QWxpclV3YVo5RXY3ZXk0MDRHS1NjaHFHQ0hDYTdDTDlXaDBNUlMwcEJmWjZzVnRvZHcxV2QvOVR6bkVGKzErdzJhbkd0WW4wdDdNbS9aYlg5N3pWL1dCWVFSWVJpYTBmekZ0dXVMa1ZlbDJZcEwrNXRQTVBEVk9MZk9rbHBOYzc2VVcxcHl0RGNCcFVSaDVtM2czS0ErZUtNcVRXcHh4c1VTOFVOL3Bpc3hKeEtWUU5ubTlaeFZtY0NyQ2wrQjQ4VDdvcVh1eXI3Y2ROWkZJa3d3QjE3YjgyeWpVQ2IwQS9OUEY1M3poM3pTOWNkSk15dDhoU09DWEdxZ3FZTllHUnR0Zlg4blJqMXBhTUpEUFZGRUk5cjBlQlF1Y0RYRjhyVU5aNVMzT2tlcHpYMmwrK1B4bzBGSmJqd0RoRGVYQUY3Ynd5NmI3Vk9VSEtXSy9LbTRpM0VIL2VidDZISVlid0Z0TklIRmZBdjVURm1XOTZpeU1lbEZvdHp1NmJqRWIzL05TWlc0RW1ScWhvVzVpUnhLaXBPandIR2paNUtiOHM3Sm81dkQ3c25OR2VIT1dzbW96WFJ5NDkveDFhUFpnNUZHS1hRSnZxbnUwdWZzcUZjemRza0I5T0FMaVlYc3Ntaml1RUEwSGlCWGhJcHovTzBWRnlGeEltdlYyS2NlT0lFTU1GZmkwVWNTU1BqaEUyOXF0YVV3bDNIMWJrN1RMa05XZHpkYTZDR3BURnJwS3FhOVI4VGdLbmUxcGZzeGVOL1JKSElHOWJuaFJVeGM1a085Y3hCcGdxUHBiNC9yMTVjVnFIUzZlWllnaVF5N0NmMUJKN2lTTTdicGhPcFZ3VzhSWXVFKzlKcDE1SVFQemFpRllIdmJ1Y0w0OXVycTJMSHROM0hDWndOQ3hCR2xzWHVLRzQ3c2RjaGxVOGlQcVZZRnlEMUQxRDhscFUvbkUvS2lkb21uQXNFYXpWYldNQnZvU2FMdktCUnQwWEowb0E1NHphalVJNUkvVm95bWJEVVl2MmNVdUQwbGxjRmFIZFVlUWdQY055SndacHV6QVFtUGZrNFlPUWphazU0SUhacjgyUk5lUWR6eDZ0bzluVnRVcHlrY0xjOVRWbDhMb0Z1Yi9tMjRiWEQ0MU5TNXNIWWFUYTNnMDNhUldGS0RtV1BsZXE1UDNXRVkxUVAwKzB2d1BENmdyeWdtS2I2Z3R5WnNLalJrMmVjL291VjlGRVZpWXVCNmYxZStvMm8xZ2hLbTlUQnlvNGtRUGNMd1FMWmZuU0hMWkQxYVhjeVl3S2cwcTlRUWVXTGFvTEtKUEdIaDRWTy9xZ1M4TXc2cUZkYTFyKy82WEFLMGJQVlhpOWR3dllzeXRaMFU0ZytvNEcvQ1B5SURPSGFad3NBUDF1anFpY2RmTmxXdG82VHpMd0JVZThSQzdGYzJsNThjVXdrRzR5ait2SkJpRXh5M004OGlyS29sdVlOVVlMdGlTS0FhTnZwaWhjZmdMM3hFU1hBSEpsYXlGVGVuNUp1M1BQeWROM3ZqR082Z1pGaENwbm8zbzhkZHBrOHovUnE3RmpGS3JQb05LbVUyaTVPdDhXOG5hK2t6OVIzbDcvWEFoRFRIOWY2aWo0UWVFcXhQYnNFa0RldzRkOVFtY3RTWEJKVGZvVFowcDc5dEg4c3luS0pXZE1pK1l6aXFsS2s3dityUi9zVURMRVo5Q3F2TGZJbHpMYlRIS0t6NHdKNU9ZUmdXWHM0RDhhcGhwZ2Y2LmFXX281UG9ON21hYmVhQ2tTdC1USWU4MzhkRXhmdmVVUU1nMjJnOUFrVGw1NlFjTk5vSGdlUl90R1hjMUVqaklTMWdQV2x3R18wdmttcndPWEp2Wk5n"}
+2025-09-20T23:47:46.925+0800	INFO	login/login_impl.go:85	重新定向登录成功
+2025-09-20T23:47:46.926+0800	INFO	roll_call/roll_call_impl.go:267	登录成功	{"deviceID": "f0043dd0-1a45-482a-820b-abe22a3080bf"}
+2025-09-20T23:47:46.926+0800	INFO	xmu_roll_call/main.go:28	登录成功	{"deviceId": "f0043dd0-1a45-482a-820b-abe22a3080bf"}
+2025-09-20T23:47:46.926+0800	INFO	xmu_roll_call/main.go:66	服务启动，监听 8080 端口
+2025-09-20T23:47:55.510+0800	INFO	llms/llm_impl.go:109	LLM response	{"reply": "你好呀！😊 很高兴见到你。  \n你今天过得怎么样？"}
+2025-09-20T23:48:07.364+0800	INFO	llms/llm_impl.go:109	LLM response	{"reply": "favicon.ico 是网站的“网站图标”文件，通常显示在浏览器标签页、书签、历史记录等位置，用来代表网站的品牌或标识。  \n\n**详细说明：**  \n- **文件格式**：`.ico` 是一种图标文件格式，可以包含一个或多个不同尺寸和色深的图像。  \n- **常见尺寸**：16×16 像素（浏览器标签页常用）、32×32、48×48 等。  \n- **位置**：通常放在网站根目录下，例如 `https://example.com/favicon.ico`。  \n- **作用**：提升网站辨识度和用户体验。  \n- **引用方式**：  \n  虽然很多浏览器会自动尝试加载根目录下的 `favicon.ico`，但推荐在 HTML 中显式声明，例如：  \n  ```html\n  <link rel=\"icon\" href=\"/favicon.ico\" type=\"image/x-icon\">\n  ```\n  或者使用 PNG、SVG 等格式：\n  ```html\n  <link rel=\"icon\" href=\"/favicon.png\" type=\"image/png\">\n  ```\n\n**制作 favicon.ico 的方法**：  \n1. 使用图像编辑软件（如 Photoshop、GIMP）制作 16×16 或 32×32 的图标。  \n2. 使用在线工具（如 favicon.io、realfavicongenerator.net）将 PNG/JPG 转换为 `.ico` 文件。  \n3. 将生成的 `favicon.ico` 上传到网站根目录，并在 HTML 中引用。  \n\n如果你需要，我可以帮你**生成一个 favicon.ico 文件**的示例，或者提供**在线生成工具链接**。  \n你是想让我帮你**制作一个 favicon**，还是想了解**如何在网站中添加它**？"}
+2025-09-20T23:48:32.354+0800	INFO	llms/llm_impl.go:109	LLM response	{"reply": " 我是 Claude，由 Anthropic 开发的AI助手。我可以帮您解答问题、协助完成各种任务，比如写作、分析、编程、创意工作等等。有什么我可以帮助您的吗？"}
+2025-09-20T23:48:43.670+0800	INFO	llms/llm_impl.go:109	LLM response	{"reply": " I can see you've mentioned \"favicon.ico\" - this is typically a small icon file used by websites to display in browser tabs, bookmarks, and other places. \n\nAre you looking for help with:\n\n1. **Creating a favicon** for a website?\n2. **Converting an image** to favicon format?\n3. **Implementing a favicon** in HTML?\n4. **Generating favicon code** for different sizes and formats?\n5. Something else related to favicons?\n\nLet me know what specific help you need with favicons and I'll be happy to assist you!"}
