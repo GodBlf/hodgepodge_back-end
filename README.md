@@ -1,14 +1,26 @@
-# xmu签到脚本 
+# 后端大杂烩
 - golang wire依赖注入练习
-
+# 实现功能
+- xmu教务签到
+- gpt5 claude4sonnet 对话
+- aiagent实验
+- 一些脚本
 # 技术栈
+## client
 - resty
 - cookiejar
-- gin
-- goquery
 - json
 - gjson
+- goquery
+## server
+- gin
+## log
 - zap
+## config
 - viper
+## interface and dependency injection
 - gomock
 - wire
+## vibe coding
+- github copilot
+- claude code
