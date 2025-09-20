@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"time"
 	"xmu_roll_call/app_plus/llms"
 	"xmu_roll_call/global"
 	"xmu_roll_call/initialize"
+
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 //TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
@@ -49,7 +50,7 @@ func main() {
 	})
 	//llm
 	llmImpl := llms.NewLlmImpl()
-	global.Router.GET("/llm", llmImpl.Send)
+	global.Router.POST("/llm", llmImpl.Send)
 	//
 	global.Router.GET("/r", rollCallImpl.RollCallFinal)
 	global.Router.Run(":8080")

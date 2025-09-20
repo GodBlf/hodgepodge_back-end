@@ -10,6 +10,7 @@ import (
 	"xmu_roll_call/app/encrypt"
 	"xmu_roll_call/app/login"
 	"xmu_roll_call/app/roll_call"
+	"xmu_roll_call/app_plus/random_sentence"
 )
 
 func InitializeLoginImpl() *login.LoginImpl {
@@ -35,4 +36,13 @@ func InitializeAppImpl() *app.AppImpl {
 		wire.Bind(new(roll_call.RollCall), new(*roll_call.RollCallImpl)),
 	)
 	return &app.AppImpl{}
+}
+
+func InitializeRandomSentenceImpl() *random_sentence.RandSenImpl {
+	wire.Build(
+		client.NewRandomSentenceClient, random_sentence.NewRandSenImpl,
+		wire.Bind(new(random_sentence.RandomSentence), new(*random_sentence.RandSenImpl)),
+	)
+	return &random_sentence.RandSenImpl{}
+
 }

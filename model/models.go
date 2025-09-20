@@ -19,3 +19,20 @@ type RollCallJson struct {
 type RollCalls struct {
 	List []RollCallJson `json:"rollcalls"`
 }
+
+type RandomSentenceUrl struct {
+	Urls []string
+}
+
+// url and api_key
+type LlmUrlKey struct {
+	Url    string `mapstructure:"url"`
+	ApiKey string `mapstructure:"api_key"`
+}
+
+// 仅包含主力模型
+type ModelLlmUrlKey struct {
+	ModelCount    int         `mapstructure:"model_count"`
+	Gpt5Chat      []LlmUrlKey `mapstructure:"gpt_5_chat"`
+	Claude4Sonnet []LlmUrlKey `mapstructure:"claude_4_sonnet"`
+}

@@ -1,9 +1,10 @@
 package initialize
 
 import (
-	"github.com/spf13/viper"
 	"xmu_roll_call/global"
 	"xmu_roll_call/model"
+
+	"github.com/spf13/viper"
 )
 
 type ConfigModel struct {
@@ -38,5 +39,10 @@ func InitConfig() {
 		IdsUrl:            v.GetString("ids_url"),
 		RollCallStatusUrl: v.GetString("roll_call_status_url"),
 	}
+	//llmlist config
+	global.MLUK = &model.ModelLlmUrlKey{
+		ModelCount: 2,
+	}
+	v.Unmarshal(global.MLUK)
 	global.Config = cfg
 }

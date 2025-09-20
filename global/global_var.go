@@ -1,8 +1,9 @@
 package global
 
 import (
-	"github.com/gin-gonic/gin"
 	"xmu_roll_call/model"
+
+	"github.com/gin-gonic/gin"
 )
 
 var (
@@ -25,3 +26,5 @@ var Locations = []struct {
 	{"39.989643", "116.305408", "清华大学"},
 	{"31.326315", "121.441049", "上海交通大学"},
 }
+
+var MLUK *model.ModelLlmUrlKey
