@@ -159,7 +159,7 @@ func (r *RollCallImpl) postNumberCode(rollcallID int, numberCode, deviceId strin
 	resp, err := r.Client.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(payload).
-		Post(url)
+		Put(url)
 	if err != nil {
 		return err
 	}
