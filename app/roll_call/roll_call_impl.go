@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"sync"
+	"time"
 	"xmu_roll_call/app/login"
 	"xmu_roll_call/global"
 	"xmu_roll_call/model"
@@ -79,6 +80,40 @@ type RollCallImpl struct {
 //			return
 //		}
 //	}
+func (r *RollCallImpl) reportLearningActivity(user *Profile, courseID, activityID int, subType string) error {
+	payload := map[string]interface{}{
+		"is_mobile":       true,
+		"user_agent":      global.Config.UserAgent, // 需要你额外保存UA
+		"user_id":         user.ID,
+		"user_no":         user.UserNo,
+		"user_name":       user.Name,
+		"org_id":          1,
+		"org_name":        "课程中心",
+		"dep_name":        user.Department.Name,
+		"course_id":       courseID,
+		"activity_id":     activityID,
+		"activity_type":   "rollcall",
+		"is_teacher":      false,
+		"mode":            "normal",
+		"enrollment_role": "student",
+		"channel":         "app",
+		"ts":              time.Now().UnixMilli(),
+		"action":          "sign",
+		"sub_type":        subType,
+	}
+	resp, err := r.Client.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(payload).
+		Post("https://lnt.xmu.edu.cn/statistics/api/learning-activity")
+	if err != nil {
+		return err
+	}
+	if resp.StatusCode() >= 400 {
+		return fmt.Errorf("status %d: %s", resp.StatusCode(), resp.String())
+	}
+	return nil
+}
+
 func (r *RollCallImpl) RollCallFinal(c *gin.Context) {
 	courses, err := r.RollCallStatus()
 	if err != nil {
@@ -92,8 +127,12 @@ func (r *RollCallImpl) RollCallFinal(c *gin.Context) {
 	}
 
 	results := make([]string, 0)
-
+	profile, err := r.GetProfile()
+	if err != nil {
+		zap.L().Error("获取用户信息失败", zap.Error(err))
+	}
 	for _, course := range courses.List {
+		r.DeviceId = utils.Uuid()
 		if course.Status != "absent" {
 			results = append(results, fmt.Sprintf("✅ %s 已完成签到", course.CourseTitle))
 			continue
@@ -106,12 +145,13 @@ func (r *RollCallImpl) RollCallFinal(c *gin.Context) {
 				results = append(results, fmt.Sprintf("❌ %s 获取签到码失败", course.CourseTitle))
 				continue
 			}
-			err = r.postNumberCode(course.RollcallID, numberCode, r.DeviceId)
+			err = r.putNumberCode(course.RollcallID, numberCode, r.DeviceId)
 			if err != nil {
-				results = append(results, fmt.Sprintf("❌ %s 数字签到失败", course.CourseTitle))
+				results = append(results, fmt.Sprintf("❌ %s 数字签到失败,签到码: %s", course.CourseTitle, numberCode))
 				continue
 			}
 			results = append(results, fmt.Sprintf("✅ %s 数字签到成功，签到码 %s", course.CourseTitle, numberCode))
+			r.reportLearningActivity(profile, course.CourseId, course.RollcallID, "number")
 			continue
 		}
 
@@ -122,12 +162,21 @@ func (r *RollCallImpl) RollCallFinal(c *gin.Context) {
 				results = append(results, fmt.Sprintf("❌ %s 雷达定位失败", course.CourseTitle))
 				continue
 			}
-			err = r.postRadarSign(course.RollcallID, lat, lon, r.DeviceId)
+			err = r.putRadarSign(course.RollcallID, lat, lon, r.DeviceId)
 			if err != nil {
 				results = append(results, fmt.Sprintf("❌ %s 雷达签到失败", course.CourseTitle))
 				continue
 			}
 			results = append(results, fmt.Sprintf("✅ %s 雷达签到成功，位置 %s 距离 %.2fm", course.CourseTitle, locName, dist))
+			err = r.reportRadarLearningActivity(profile, course.CourseId, course.RollcallID)
+			if err != nil {
+				zap.L().Error("radar learning activity 上报失败", zap.Error(err))
+			}
+			r.reportRadarLearningActivity(profile, course.CourseId, course.RollcallID)
+			code, _ := r.GetCourseCode(course.CourseId)
+			r.reportRadarExtraData(profile, course.CourseId, code, course.CourseTitle, course.RollcallID,
+				profile.Department.ID, profile.Department.Name, lat, lon, dist,
+			)
 			continue
 		}
 
@@ -137,6 +186,88 @@ func (r *RollCallImpl) RollCallFinal(c *gin.Context) {
 
 	c.JSON(200, gin.H{"result": results})
 }
+
+// reportRadarLearningActivity 上报雷达签到的学习活动记录
+func (r *RollCallImpl) reportRadarLearningActivity(user *Profile, courseID, activityID int) error {
+	payload := map[string]interface{}{
+		"is_mobile":       true,
+		"user_agent":      global.Config.UserAgent, // 你需要提前保存这个 UA
+		"user_id":         user.ID,
+		"user_no":         user.UserNo,
+		"user_name":       user.Name,
+		"org_id":          1,
+		"org_name":        "课程中心",
+		"dep_name":        user.Department.Name,
+		"course_id":       courseID,
+		"activity_id":     activityID,
+		"activity_type":   "rollcall",
+		"is_teacher":      false,
+		"mode":            "normal",
+		"enrollment_role": "student",
+		"channel":         "app",
+		"ts":              time.Now().UnixMilli(),
+		"action":          "sign",
+		"sub_type":        "radar",
+	}
+	resp, err := r.Client.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(payload).
+		Post("https://lnt.xmu.edu.cn/statistics/api/learning-activity")
+	if err != nil {
+		return err
+	}
+	if resp.StatusCode() >= 400 {
+		return fmt.Errorf("status %d: %s", resp.StatusCode(), resp.String())
+	}
+	return nil
+}
+
+// reportRadarExtraData 上报雷达签到的详细位置信息
+func (r *RollCallImpl) reportRadarExtraData(
+	user *Profile,
+	courseID int, courseCode, courseName string,
+	activityID int, depID int, depName string,
+	latitude, longitude float64, studentDistance float64,
+) error {
+	payload := map[string]interface{}{
+		"is_mobile":        true,
+		"user_agent":       global.Config.UserAgent,
+		"user_id":          user.ID,
+		"user_no":          user.UserNo,
+		"user_name":        user.Name,
+		"org_id":           1,
+		"org_name":         "课程中心",
+		"dep_id":           depID,
+		"dep_name":         depName,
+		"course_id":        courseID,
+		"course_code":      courseCode,
+		"course_name":      courseName,
+		"is_teacher":       false,
+		"action_type":      "participate",
+		"ts":               time.Now().UnixMilli(),
+		"rollcall_id":      activityID,
+		"accuracy":         90,
+		"student_distance": studentDistance,
+		"device_id":        r.DeviceId,
+		"student_status":   "on_call_fine",
+		"location": map[string]float64{
+			"lat": latitude,
+			"lon": longitude,
+		},
+	}
+	resp, err := r.Client.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(payload).
+		Post("https://lnt.xmu.edu.cn/statistics/api/rollcall/extra-data")
+	if err != nil {
+		return err
+	}
+	if resp.StatusCode() >= 400 {
+		return fmt.Errorf("status %d: %s", resp.StatusCode(), resp.String())
+	}
+	return nil
+}
+
 func (r *RollCallImpl) getNumberCode(rollcallID int) (string, error) {
 	url := fmt.Sprintf("https://lnt.xmu.edu.cn/api/rollcall/%d/student_rollcalls", rollcallID)
 	resp, err := r.Client.R().Get(url)
@@ -150,7 +281,7 @@ func (r *RollCallImpl) getNumberCode(rollcallID int) (string, error) {
 	return code, nil
 }
 
-func (r *RollCallImpl) postNumberCode(rollcallID int, numberCode, deviceId string) error {
+func (r *RollCallImpl) putNumberCode(rollcallID int, numberCode, deviceId string) error {
 	url := fmt.Sprintf("https://lnt.xmu.edu.cn/api/rollcall/%d/answer_number_rollcall", rollcallID)
 	payload := map[string]string{
 		"deviceId":   deviceId,
@@ -164,6 +295,7 @@ func (r *RollCallImpl) postNumberCode(rollcallID int, numberCode, deviceId strin
 		return err
 	}
 	if resp.StatusCode() >= 400 {
+		zap.L().Error("数字签到请求返回错误状态码", zap.Int("status_code", resp.StatusCode()), zap.String("response", resp.String()))
 		return fmt.Errorf("status %d: %s", resp.StatusCode(), resp.String())
 	}
 	return nil
@@ -171,6 +303,47 @@ func (r *RollCallImpl) postNumberCode(rollcallID int, numberCode, deviceId strin
 
 type RadarSign struct {
 	Distance float64 `json:"distance"`
+}
+
+type Profile struct {
+	ID         int    `json:"id"`
+	Name       string `json:"name"`
+	UserNo     string `json:"user_no"`
+	Department struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	} `json:"department"`
+}
+
+func (r *RollCallImpl) GetProfile() (*Profile, error) {
+	url := "https://lnt.xmu.edu.cn/api/profile"
+	resp, err := r.Client.R().Get(url)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode() >= 400 {
+		return nil, fmt.Errorf("status %d", resp.StatusCode())
+	}
+	var p Profile
+	if err := json.Unmarshal(resp.Body(), &p); err != nil {
+		return nil, err
+	}
+	return &p, nil
+}
+
+type CourseInfo struct {
+	CourseCode string `json:"course_code"`
+}
+
+func (r *RollCallImpl) GetCourseCode(courseID int) (string, error) {
+	url := fmt.Sprintf("https://lnt.xmu.edu.cn/api/courses/%d?fields=name,course_code,instructors(name)", courseID)
+	request := r.Client.R()
+	resp, err := request.Get(url)
+	if err != nil {
+		zap.L().Error("获取课程信息失败", zap.Error(err))
+	}
+	cc := gjson.Get(resp.String(), "course_code")
+	return cc.String(), nil
 }
 
 func (r *RollCallImpl) getRadarBestLocation(rollcallID int) (lat, lon float64, name string, dist float64, err error) {
@@ -223,7 +396,7 @@ func (r *RollCallImpl) getRadarBestLocation(rollcallID int) (lat, lon float64, n
 	return lat, lon, name, dist, nil
 }
 
-func (r *RollCallImpl) postRadarSign(rollcallID int, lat, lon float64, deviceId string) error {
+func (r *RollCallImpl) putRadarSign(rollcallID int, lat, lon float64, deviceId string) error {
 	url := fmt.Sprintf("https://lnt.xmu.edu.cn/api/rollcall/%d/answer?api_version=1.1.2", rollcallID)
 	payload := map[string]interface{}{
 		"deviceId":         deviceId,

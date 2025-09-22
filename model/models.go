@@ -12,6 +12,7 @@ type RollCalls struct {
 }
 type RollCallItem struct {
 	CourseTitle string `json:"course_title"`
+	CourseId    int    `json:"course_id"`
 	RollcallID  int    `json:"rollcall_id"`
 	IsNumber    bool   `json:"is_number"`
 	IsRadar     bool   `json:"is_radar"`

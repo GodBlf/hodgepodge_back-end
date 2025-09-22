@@ -29,10 +29,10 @@ func main() {
 
 	// ========== 路由定义 ==========
 	// 根路径重定向到 /test/:input
-	global.Router.GET("/:input", func(c *gin.Context) {
-		input := c.Param("input")
-		c.Redirect(302, "/testllm/"+input)
-	})
+	//global.Router.GET("/:input", func(c *gin.Context) {
+	//	input := c.Param("input")
+	//	c.Redirect(302, "/testllm/"+input)
+	//})
 
 	// 测试 LLM 翻译接口
 	global.Router.GET("/testllm/:input", func(c *gin.Context) {
@@ -68,4 +68,5 @@ func main() {
 	if err := global.Router.Run(":8080"); err != nil {
 		zap.L().Fatal("服务器启动失败", zap.Error(err))
 	}
+
 }
