@@ -21,5 +21,5 @@
     // 先立即执行一次
     getData();
     // 每隔 5 秒执行一次
-    setInterval(getData, 1000);
+    setInterval(getData, 5000);
 })();

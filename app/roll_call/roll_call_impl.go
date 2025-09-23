@@ -134,6 +134,7 @@ func (r *RollCallImpl) RollCallFinal(c *gin.Context) {
 	for _, course := range courses.List {
 		r.DeviceId = utils.Uuid()
 		if course.Status != "absent" {
+			zap.L().Info("✅ 已完成签到", zap.String("course", course.CourseTitle))
 			results = append(results, fmt.Sprintf("✅ %s 已完成签到", course.CourseTitle))
 			continue
 		}
@@ -142,14 +143,17 @@ func (r *RollCallImpl) RollCallFinal(c *gin.Context) {
 		if course.IsNumber {
 			numberCode, err := r.getNumberCode(course.RollcallID)
 			if err != nil || numberCode == "" {
+				zap.L().Error("获取签到码失败", zap.String("course", course.CourseTitle), zap.Error(err))
 				results = append(results, fmt.Sprintf("❌ %s 获取签到码失败", course.CourseTitle))
 				continue
 			}
 			err = r.putNumberCode(course.RollcallID, numberCode, r.DeviceId)
 			if err != nil {
+				zap.L().Error("数字签到失败", zap.String("course", course.CourseTitle), zap.String("number_code", numberCode), zap.Error(err))
 				results = append(results, fmt.Sprintf("❌ %s 数字签到失败,签到码: %s", course.CourseTitle, numberCode))
 				continue
 			}
+			zap.L().Info("数字签到成功", zap.String("course", course.CourseTitle), zap.String("number_code", numberCode))
 			results = append(results, fmt.Sprintf("✅ %s 数字签到成功，签到码 %s", course.CourseTitle, numberCode))
 			r.reportLearningActivity(profile, course.CourseId, course.RollcallID, "number")
 			continue
@@ -159,14 +163,17 @@ func (r *RollCallImpl) RollCallFinal(c *gin.Context) {
 		if course.IsRadar {
 			lat, lon, locName, dist, err := r.getRadarBestLocation(course.RollcallID)
 			if err != nil {
+				zap.L().Error("雷达定位失败", zap.String("course", course.CourseTitle), zap.Error(err))
 				results = append(results, fmt.Sprintf("❌ %s 雷达定位失败", course.CourseTitle))
 				continue
 			}
 			err = r.putRadarSign(course.RollcallID, lat, lon, r.DeviceId)
 			if err != nil {
+				zap.L().Error("雷达签到失败", zap.String("course", course.CourseTitle), zap.Error(err))
 				results = append(results, fmt.Sprintf("❌ %s 雷达签到失败", course.CourseTitle))
 				continue
 			}
+			zap.L().Info("雷达签到成功", zap.String("course", course.CourseTitle), zap.String("location", locName), zap.Float64("distance", dist))
 			results = append(results, fmt.Sprintf("✅ %s 雷达签到成功，位置 %s 距离 %.2fm", course.CourseTitle, locName, dist))
 			err = r.reportRadarLearningActivity(profile, course.CourseId, course.RollcallID)
 			if err != nil {
@@ -181,6 +188,7 @@ func (r *RollCallImpl) RollCallFinal(c *gin.Context) {
 		}
 
 		// 二维码签到
+		zap.L().Warn("二维码签到请人工完成", zap.String("course", course.CourseTitle))
 		results = append(results, fmt.Sprintf("⚠️ %s 二维码签到，请人工完成", course.CourseTitle))
 	}
 

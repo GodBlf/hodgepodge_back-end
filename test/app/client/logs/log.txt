@@ -1,0 +1,12 @@
+2025-09-23T11:50:08.977+0800	ERROR	client/client_test.go:42	请求失败	{"error": "Get \"http://10.242.194.32:8080/r\": dial tcp 10.242.194.32:8080: connectex: No connection could be made because the target machine actively refused it."}
+xmu_roll_call/test/app/client.TestClientlunxun
+	D:/Projects/xmu_roll_call/test/app/client/client_test.go:42
+testing.tRunner
+	D:/gosdk/go1.24.4/src/testing/testing.go:1792
+2025-09-23T11:50:09.083+0800	INFO	client/client_test.go:44	请求成功	{"响应": ""}
+2025-09-23T11:50:12.122+0800	ERROR	client/client_test.go:42	请求失败	{"error": "Get \"http://10.242.194.32:8080/r\": dial tcp 10.242.194.32:8080: connectex: No connection could be made because the target machine actively refused it."}
+xmu_roll_call/test/app/client.TestClientlunxun
+	D:/Projects/xmu_roll_call/test/app/client/client_test.go:42
+testing.tRunner
+	D:/gosdk/go1.24.4/src/testing/testing.go:1792
+2025-09-23T11:50:12.122+0800	INFO	client/client_test.go:44	请求成功	{"响应": ""}

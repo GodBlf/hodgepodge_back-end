@@ -6,7 +6,7 @@ import (
 
 func InitLogger() {
 	config := zap.NewDevelopmentConfig()
-	config.OutputPaths = []string{"stdout", "logs/log.txt"}
+	config.OutputPaths = []string{"stdout"}
 	logger, err := config.Build()
 	if err != nil {
 		panic(err)
