@@ -147,6 +147,7 @@ func (r *RollCallImpl) RollCallFinal(c *gin.Context) {
 				results = append(results, fmt.Sprintf("❌ %s 获取签到码失败", course.CourseTitle))
 				continue
 			}
+
 			err = r.putNumberCode(course.RollcallID, numberCode, r.DeviceId)
 			if err != nil {
 				zap.L().Error("数字签到失败", zap.String("course", course.CourseTitle), zap.String("number_code", numberCode), zap.Error(err))
