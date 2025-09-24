@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/xmu_roll_call.iml" filepath="$PROJECT_DIR$/.idea/xmu_roll_call.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/hodgepodge_back-end.iml" filepath="$PROJECT_DIR$/.idea/hodgepodge_back-end.iml" />
     </modules>
   </component>
 </project>
