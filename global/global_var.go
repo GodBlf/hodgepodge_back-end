@@ -12,9 +12,10 @@ var (
 )
 
 var (
-	LlmUrl    string
-	LlmApiKey string
-	LlmModel  string
+	LlmUrl        string
+	LlmApiKey     string
+	LlmModel      string
+	OpenaiVersion string
 )
 
 var Locations = []model.Location{

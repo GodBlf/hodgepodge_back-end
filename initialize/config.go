@@ -23,6 +23,7 @@ func InitConfig() {
 	global.LlmUrl = v.GetString("llm_url")
 	global.LlmApiKey = v.GetString("llm_api_key")
 	global.LlmModel = v.GetString("llm_model")
+	global.OpenaiVersion = v.GetString("openai_version")
 	username := v.GetString("username")
 	password := v.GetString("password")
 	ua := v.GetString("user_agent")

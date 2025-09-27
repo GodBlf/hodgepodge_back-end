@@ -4,10 +4,12 @@ go 1.24
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.3
+	github.com/fatih/color v1.18.0
 	github.com/gin-gonic/gin v1.10.1
 	github.com/go-resty/resty/v2 v2.16.5
 	github.com/golang/mock v1.6.0
 	github.com/google/wire v0.7.0
+	github.com/sashabaranov/go-openai v1.41.2
 	github.com/spf13/viper v1.20.1
 	github.com/tidwall/gjson v1.18.0
 	go.uber.org/zap v1.27.0
@@ -30,6 +32,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.7 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect

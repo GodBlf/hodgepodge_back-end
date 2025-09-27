@@ -1,13 +1,14 @@
 package login
 
 import (
-	"github.com/PuerkitoBio/goquery"
-	"github.com/go-resty/resty/v2"
-	"go.uber.org/zap"
 	"strings"
 	"sync"
 	"xmu_roll_call/app/encrypt"
 	"xmu_roll_call/global"
+
+	"github.com/PuerkitoBio/goquery"
+	"github.com/go-resty/resty/v2"
+	"go.uber.org/zap"
 )
 
 var (
@@ -46,7 +47,7 @@ func (l *LoginImpl) GetLoginPage() (salt, execution, lt string, err error) {
 	if boolean == false {
 		zap.L().Error("execution抓取失败", zap.Error(err))
 	} else {
-		zap.L().Info("execution抓取成功", zap.String("execution", execution))
+		zap.L().Info("execution抓取成功", zap.String("execution", string([]rune(execution)[0:50])+"..."))
 	}
 	lt, _ = doc.Find("input[name='lt']").Attr("value")
 	if salt == "" || execution == "" {

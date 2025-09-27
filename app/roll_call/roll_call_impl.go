@@ -446,7 +446,7 @@ func (r *RollCallImpl) RollCallLogin() (string, error) {
 		zap.L().Warn("登录失败,请检查用户名和密码是否正确", zap.String("execution", execution))
 		return deviceID, errors.New("登录失败,请检查用户名和密码是否正确")
 	}
-	zap.L().Info("登录成功", zap.String("deviceID", deviceID))
+	zap.L().Info("登录成功", zap.String("deviceID", utils.Uuid()))
 	return deviceID, nil
 
 }
