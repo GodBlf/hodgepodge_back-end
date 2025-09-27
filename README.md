@@ -21,6 +21,8 @@
 ## interface and dependency injection
 - gomock
 - wire
+## llm
+- go-openai
 ## vibe coding
 - github copilot
 - claude code
