@@ -96,3 +96,9 @@ func TestMyopenai(t *testing.T) {
 	}()
 	wg.Wait()
 }
+
+func TestMyopenai2(t *testing.T) {
+	initialize.InitLogger()
+	initialize.InitConfig()
+
+}

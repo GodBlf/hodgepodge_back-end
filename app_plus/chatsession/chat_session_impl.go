@@ -33,7 +33,7 @@ func NewChatSessionImpl() *ChatSessionImpl {
 		Messages:       make([]openai.ChatCompletionMessage, 0),
 		client:         openai.NewClientWithConfig(config),
 		model:          global.LlmModel,
-		ChatStreamChan: make(chan ChatStreamElement, 16),
+		ChatStreamChan: make(chan ChatStreamElement, 2),
 	}
 }
 
