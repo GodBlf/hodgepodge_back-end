@@ -11,6 +11,8 @@ var (
 	Router *gin.Engine
 )
 
+var EmbedModelVar *model.EmbedModel = &model.EmbedModel{}
+
 var (
 	LlmUrl        string
 	LlmApiKey     string

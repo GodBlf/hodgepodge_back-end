@@ -52,3 +52,10 @@ type ModelLlmUrlKey struct {
 	Gpt5Chat      []LlmUrlKey `mapstructure:"gpt_5_chat"`
 	Claude4Sonnet []LlmUrlKey `mapstructure:"claude_4_sonnet"`
 }
+
+// embed 模型
+type EmbedModel struct {
+	Url       string `mapstructure:"embed_url"`
+	ApiKey    string `mapstructure:"embed_api_key"`
+	ModelName string `mapstructure:"embed_model_name"`
+}

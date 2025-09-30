@@ -15,7 +15,7 @@ type ConfigModel struct {
 
 func InitConfig() {
 	v := viper.New()
-	v.SetConfigFile("D:\\tmp_test\\qiandaotest\\config\\config.yaml")
+	v.SetConfigFile("D:\\global_config\\hotpot_dev_config\\config.yaml")
 	err := v.ReadInConfig()
 	if err != nil {
 		panic("读取配置文件失败: " + err.Error())
@@ -46,4 +46,6 @@ func InitConfig() {
 	}
 	v.Unmarshal(global.MLUK)
 	global.Config = cfg
+
+	v.Unmarshal(global.EmbedModelVar)
 }

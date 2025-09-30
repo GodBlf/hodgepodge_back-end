@@ -61,9 +61,8 @@ func (cs *ChatSessionImpl) ClearHistory() {
 }
 
 // formatPrompt 根据模板和历史生成消息列表
-func (cs *ChatSessionImpl) SetPrompt(ctx context.Context, system string, question string, m map[string]any) error {
+func (cs *ChatSessionImpl) SetSystemPrompt(ctx context.Context, m map[string]any) error {
 	cs.ClearHistory()
-	cs.SetPromptTemplate(system, question)
 	parse, err := template.New("system").Parse(cs.systemTemplate)
 	if err != nil {
 		zap.L().Error("failed to parse system template", zap.Error(err))
@@ -82,7 +81,19 @@ func (cs *ChatSessionImpl) SetPrompt(ctx context.Context, system string, questio
 
 // todo:没用模板
 // Chat 非流式聊天
-func (cs *ChatSessionImpl) Chat(ctx context.Context, question string) (string, error) {
+func (cs *ChatSessionImpl) Chat(ctx context.Context, q map[string]any) (string, error) {
+	tmpl, err := template.New("question").Parse(cs.questionTemplate)
+	if err != nil {
+		zap.L().Error("failed to parse question template", zap.Error(err))
+		return "", err
+	}
+	bf := &bytes.Buffer{}
+	err = tmpl.Execute(bf, q)
+	if err != nil {
+		zap.L().Error("failed to execute question template", zap.Error(err))
+		return "", err
+	}
+	question := bf.String()
 	cs.History = append(cs.History, schema.UserMessage(question))
 	response, err := cs.Llm.Generate(ctx, cs.History)
 	if err != nil {
@@ -99,7 +110,23 @@ func (cs *ChatSessionImpl) Chat(ctx context.Context, question string) (string, e
 }
 
 // ChatStream 流式聊天 （发送到 channel）
-func (cs *ChatSessionImpl) ChatStream(ctx context.Context, question string) {
+func (cs *ChatSessionImpl) ChatStream(ctx context.Context, q map[string]any) {
+	tmpl, err := template.New("question").Parse(cs.questionTemplate)
+	if err != nil {
+		zap.L().Error("failed to parse question template", zap.Error(err))
+		cs.streamChan <- ChatStreamElement{Err: err}
+		close(cs.streamChan)
+		return
+	}
+	bf := &bytes.Buffer{}
+	err = tmpl.Execute(bf, q)
+	if err != nil {
+		zap.L().Error("failed to execute question template", zap.Error(err))
+		cs.streamChan <- ChatStreamElement{Err: err}
+		close(cs.streamChan)
+		return
+	}
+	question := bf.String()
 	defer close(cs.streamChan)
 	cs.History = append(cs.History, schema.UserMessage(question))
 	stream, err := cs.Llm.Stream(ctx, cs.History)
