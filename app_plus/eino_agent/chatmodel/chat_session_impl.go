@@ -1,4 +1,4 @@
-package einochat
+package chatmodel
 
 import (
 	"bytes"

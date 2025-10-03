@@ -8,6 +8,7 @@ require (
 	github.com/cloudwego/eino-ext/components/embedding/openai v0.0.0-20250929071429-e7650d831a09
 	github.com/cloudwego/eino-ext/components/indexer/milvus v0.0.0-20250929071429-e7650d831a09
 	github.com/cloudwego/eino-ext/components/model/openai v0.1.1
+	github.com/cloudwego/eino-ext/components/retriever/milvus v0.0.0-20250929071429-e7650d831a09
 	github.com/fatih/color v1.18.0
 	github.com/gin-gonic/gin v1.10.1
 	github.com/go-resty/resty/v2 v2.16.5
