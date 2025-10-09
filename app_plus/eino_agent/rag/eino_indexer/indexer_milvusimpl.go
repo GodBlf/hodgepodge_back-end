@@ -11,22 +11,22 @@ import (
 )
 
 var (
-	MilvusIndexerVar *MilvusIndexerImpl
+	MilvusIndexerVar *MilvusIndexerRam
 	milonce          = &sync.Once{}
 )
 
-type MilvusIndexerImpl struct {
-	Embedder     *openai.Embedder
-	MilvusClient client.Client
-	Indexer      *milvus.Indexer
+type MilvusIndexerRam struct {
+	EmbedderP     *openai.Embedder
+	MilvusClientP *client.Client
+	IndexerP      *milvus.Indexer
 }
 
-func NewMilvusClient(ctx context.Context, e *openai.Embedder, m client.Client) *MilvusIndexerImpl {
+func NewMilvusClient(e *openai.Embedder, m *client.Client) *MilvusIndexerRam {
 	milonce.Do(func() {
-		milvus.NewIndexer(ctx, &milvus.IndexerConfig{})
-		mii := &MilvusIndexerImpl{
-			Embedder:     e,
-			MilvusClient: m,
+		milvus.NewIndexer(context.Background(), &milvus.IndexerConfig{})
+		mii := &MilvusIndexerRam{
+			EmbedderP:     e,
+			MilvusClientP: m,
 		}
 		MilvusIndexerVar = mii
 	})

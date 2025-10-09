@@ -2,8 +2,7 @@
 - golang wire依赖注入练习
 
 # 实现功能
-- xmu教务签到
-- gpt5 claude4sonnet 对话
+- xmu roll call
 - aiagent实验
 - 一些脚本
 

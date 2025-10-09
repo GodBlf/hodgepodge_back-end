@@ -12,9 +12,9 @@ var (
 	monce           = &sync.Once{}
 )
 
-func NewMilvusClient(ctx context.Context) client.Client {
+func NewMilvusClient() *client.Client {
 	monce.Do(func() {
-		milclient, err := client.NewClient(ctx, client.Config{
+		milclient, err := client.NewClient(context.Background(), client.Config{
 			Address:  "172.18.131.29:19530",
 			Username: "godblf",
 			Password: "asd456",
@@ -25,5 +25,5 @@ func NewMilvusClient(ctx context.Context) client.Client {
 		}
 		MilvusClientVar = milclient
 	})
-	return MilvusClientVar
+	return &MilvusClientVar
 }

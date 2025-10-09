@@ -9,13 +9,13 @@ import (
 )
 
 var (
-	Embeddervar *openai.Embedder
+	EmbedderVar *openai.Embedder
 	eonce       = &sync.Once{}
 )
 
-func NewEmbedderBge(ctx context.Context) *openai.Embedder {
+func NewEmbedderBge() *openai.Embedder {
 	eonce.Do(func() {
-		e, err := openai.NewEmbedder(ctx, &openai.EmbeddingConfig{
+		e, err := openai.NewEmbedder(context.Background(), &openai.EmbeddingConfig{
 			APIKey:  global.EmbedModelVar.ApiKey,
 			Model:   global.EmbedModelVar.ModelName,
 			BaseURL: global.EmbedModelVar.Url,
@@ -23,8 +23,8 @@ func NewEmbedderBge(ctx context.Context) *openai.Embedder {
 		if err != nil {
 			panic(err)
 		}
-		Embeddervar = e
+		EmbedderVar = e
 	})
 
-	return Embeddervar
+	return EmbedderVar
 }
